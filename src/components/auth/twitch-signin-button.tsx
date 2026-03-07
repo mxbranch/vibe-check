@@ -1,6 +1,6 @@
 import { authClient } from '@/lib/auth-client'
 
-export function TwitchLoginButton() {
+export function TwitchSigninButton() {
   const clickHandler = async () => {
     await authClient.signIn.social({
       provider: 'twitch',

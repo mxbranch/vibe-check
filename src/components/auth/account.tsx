@@ -1,5 +1,6 @@
 import { authClient } from '@/lib/auth-client'
-import { TwitchLoginButton } from './twitch-login-button'
+import { TwitchSigninButton } from './twitch-signin-button'
+import { TwitchSignoutButton } from './twitch-signout-button'
 
 export function Account() {
   const session = authClient.useSession()
@@ -9,9 +10,12 @@ export function Account() {
       {session.isPending ? (
         'Loading...'
       ) : session.data ? (
-        session.data.user.name
+        <>
+          {session.data.user.name}
+          <TwitchSignoutButton />
+        </>
       ) : (
-        <TwitchLoginButton />
+        <TwitchSigninButton />
       )}
     </div>
   )
