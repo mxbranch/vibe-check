@@ -1,6 +1,7 @@
 // src/routes/index.tsx
 import { createFileRoute, useRouter } from '@tanstack/react-router'
-import { getValues, setValue } from '#/data/value-test-table'
+import { getValues, setValue } from '@/data/value-test-table'
+import { Account } from '@/components/auth/account'
 
 export const Route = createFileRoute('/')({
   component: Home,
@@ -16,6 +17,7 @@ function Home() {
 
   return (
     <>
+      <Account />
       <button
         type="button"
         onClick={() => {
