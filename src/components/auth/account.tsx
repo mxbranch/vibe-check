@@ -1,19 +1,24 @@
-import { authClient } from '@/lib/auth-client'
+import { useGetMe } from '@/lib/hooks'
 
 import { Avatar } from '../ui/avatar'
 import { TwitchSigninButton } from './twitch-signin-button'
 import { TwitchSignoutButton } from './twitch-signout-button'
 
 export function Account() {
-  const session = authClient.useSession()
+  const getMeQuery = useGetMe()
 
   return (
     <div>
-      {session.isPending ? (
+      {getMeQuery.isPending ? (
         'Loading...'
-      ) : session.data ? (
+      ) : getMeQuery.data ? (
         <>
-          <Avatar imgSrc={session.data.user.image ?? undefined} name={session.data.user.name} />
+          <Avatar
+            banned={getMeQuery.data.banned ?? false}
+            crown={getMeQuery.data.role === 'admin'}
+            imgSrc={getMeQuery.data.image ?? undefined}
+            name={getMeQuery.data.username}
+          />
           <TwitchSignoutButton />
         </>
       ) : (

@@ -1,54 +1,30 @@
 // src/routes/index.tsx
-import { createFileRoute, useRouter } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 
 import { Account } from '@/components/auth/account'
-import { getValues, setValue, validateRoomCode } from '@/data'
-import { sqids } from '@/lib/sqids'
+import { CreateRoomButton } from '@/components/game/create-room'
+import { JoinRoomForm } from '@/components/game/join-room'
+import { getMe } from '@/data'
 
 export const Route = createFileRoute('/')({
   component: Home,
-  loader: async () => await getValues(),
+  loader: async () => {
+    const user = await getMe()
+    return { user }
+  },
   head: () => ({
-    meta: [{ title: 'Vibe Check Index' }],
+    meta: [{ title: 'Vibe Check! for Jackdaw Dot Television' }],
   }),
 })
 
 function Home() {
-  const router = useRouter()
-  const testValues = Route.useLoaderData()
+  const { user } = Route.useLoaderData()
 
   return (
-    <>
+    <div className="flex flex-col gap-6">
       <Account />
-      <button
-        type="button"
-        onClick={() => {
-          setValue({ data: 'New Entry' }).then(() => {
-            router.invalidate()
-          })
-        }}
-      >
-        Add Entry
-      </button>
-      <ul>
-        {testValues.map((testValue) => {
-          const code = sqids.encode([testValue.id])
-          return (
-            <li key={testValue.id}>
-              {code} - {testValue.value}
-              <button
-                type="button"
-                onClick={async () => {
-                  const result = await validateRoomCode({ data: code })
-                  alert(`Result: ${result ? 'yes' : 'no'}`)
-                }}
-              >
-                Test
-              </button>
-            </li>
-          )
-        })}
-      </ul>
-    </>
+      {user?.role === 'admin' && <CreateRoomButton />}
+      {user && <JoinRoomForm />}
+    </div>
   )
 }

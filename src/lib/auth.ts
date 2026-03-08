@@ -1,7 +1,9 @@
 import { betterAuth } from 'better-auth'
-import { tanstackStartCookies } from 'better-auth/tanstack-start'
-import db from '@/db'
 import { drizzleAdapter } from 'better-auth/adapters/drizzle'
+import { admin } from 'better-auth/plugins'
+import { tanstackStartCookies } from 'better-auth/tanstack-start'
+
+import db from '@/db'
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
@@ -16,5 +18,8 @@ export const auth = betterAuth({
       clientSecret: process.env.BETTER_AUTH_TWITCH_SECRET!,
     },
   },
-  plugins: [tanstackStartCookies()],
+  plugins: [tanstackStartCookies(), admin()],
+  onAPIError: {
+    errorURL: '/auth-error',
+  },
 })
