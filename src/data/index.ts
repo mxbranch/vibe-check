@@ -48,7 +48,7 @@ export const createRoom = createServerFn({
 }).handler(async () => {
   // Auth
   const user = await getMe()
-  const allowed = user?.role === 'admin'
+  const allowed = user?.role === 'admin' && !user.banned
   if (!allowed) return 'unauthorized'
 
   // If previous room exists, close
@@ -102,7 +102,7 @@ export const getValidSubmission = createServerFn({ method: 'GET' })
     const { roomId } = data
     // Auth
     const user = await getMe()
-    if (!user) return 'unauthorized'
+    if (!user || user.banned) return 'unauthorized'
 
     // Check whether a valid submission exists
     const submissionWhereClause = and(
@@ -113,12 +113,14 @@ export const getValidSubmission = createServerFn({ method: 'GET' })
     const validSubmissionCount = await db.$count(submission, submissionWhereClause)
     if (validSubmissionCount === 0) {
       const prompt = await getPrompt()
+      const target = Math.random().toPrecision(2)
+      console.log({ prompt, target })
       await db.insert(submission).values({
         room: roomId,
         owner: user.id,
         from: prompt[0] ?? '',
         to: prompt[1] ?? '',
-        target: Math.random().toPrecision(2),
+        target,
       })
     }
 
@@ -134,5 +136,29 @@ export const getValidSubmission = createServerFn({ method: 'GET' })
       from: validSubmission.from,
       to: validSubmission.to,
       target: validSubmission.target,
+      hint: validSubmission.hint,
+      used: validSubmission.used,
     }
+  })
+
+export const postSubmissionSchema = v.object({
+  hint: v.pipe(v.string(), v.trim(), v.minLength(5), v.maxLength(140)),
+  submissionId: v.pipe(v.number(), v.integer()),
+})
+export type PostSubmissionSchema = v.InferInput<typeof postSubmissionSchema>
+
+export const postSubmission = createServerFn({ method: 'POST' })
+  .inputValidator(postSubmissionSchema)
+  .handler(async ({ data }) => {
+    // Auth
+    const user = await getMe()
+    if (!user || user.banned) return 'unauthorized'
+
+    // Update submission if the user is allowed to
+    await db
+      .update(submission)
+      .set({
+        hint: data.hint,
+      })
+      .where(and(eq(submission.id, data.submissionId), eq(submission.owner, user.id)))
   })

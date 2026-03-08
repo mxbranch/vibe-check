@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 
+import { CreateSubmissionForm } from '@/components/game/create-submission'
 import { getMe, getRoom, getValidSubmission } from '@/data'
 
 export const Route = createFileRoute('/play/$code')({
@@ -31,26 +32,39 @@ function RouteComponent() {
     })
     return
   }
+
   const query = useQuery({
     queryKey: ['play-submission', room.id],
     queryFn: async () => await getValidSubmission({ data: { roomId: room.id } }),
-    refetchInterval: 1000 * 60, // 1 minute
+    refetchInterval: 1000 * 30, // 30 seconds
+    retry: false,
   })
+
+  const submissionData = query.data
 
   if (query.isPending) {
     return <div>Loading...</div>
   }
 
-  if (query.data === 'unauthorized') {
+  if (!submissionData) {
+    return <div>Loading...</div>
+  }
+
+  if (submissionData === 'unauthorized') {
     return <div>Unauthorized</div>
   }
 
-  // If suggestion incomplete, display the suggestion form
-  // If suggestion made but not played, display the thank you message
-
   return (
-    <div>
-      {query.data?.id} - {query.data?.from} - {query.data?.to} - {query.data?.target}
+    <div className="flex flex-col gap-6">
+      <div>
+        {submissionData.id} - {submissionData.from} - {submissionData.to} - {submissionData.target}
+      </div>
+      {!submissionData.hint && (
+        <CreateSubmissionForm submissionId={submissionData.id} roomId={room.id} />
+      )}
+      {submissionData.hint && !submissionData.used && (
+        <>Thanks for your submission - {submissionData.hint}. Wait to see it played on stream!</>
+      )}
     </div>
   )
 }

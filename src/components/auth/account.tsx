@@ -8,7 +8,7 @@ export function Account() {
   const getMeQuery = useGetMe()
 
   return (
-    <div>
+    <div className="fixed right-6 top-6">
       {getMeQuery.isPending ? (
         'Loading...'
       ) : getMeQuery.data ? (

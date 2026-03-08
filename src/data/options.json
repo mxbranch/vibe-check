@@ -7,5 +7,7 @@
   ["Good Stream Game", "Terrible Stream Game"],
   ["Great See Podcast Movie", "Terrible See Podcast Movie"],
   ["Long", "Short"],
-  ["Too Long", "Too Short"]
+  ["Too Long", "Too Short"],
+  ["Hot", "Cold"],
+  ["Quiet", "Loud"]
 ]
