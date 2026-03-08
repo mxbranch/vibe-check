@@ -1,10 +1,23 @@
 import { createServerFn } from '@tanstack/react-start'
-import { desc } from 'drizzle-orm'
+import { desc, inArray } from 'drizzle-orm'
 import * as v from 'valibot'
 
 import db from '@/db'
-import { test } from '@/db/schema'
+import { test, room } from '@/db/schema'
+import { sqids } from '@/lib/sqids'
 
+// Room Logic
+export const validateRoomCode = createServerFn({
+  method: 'GET',
+})
+  .inputValidator(v.pipe(v.string(), v.trim()))
+  .handler(async ({ data }) => {
+    const roomId = sqids.decode(data)
+    const roomCount = await db.$count(room, inArray(room.id, roomId))
+    return roomCount > 0
+  })
+
+// Test Server Fns
 export const getValues = createServerFn({
   method: 'GET',
 }).handler(async () => {

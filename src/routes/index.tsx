@@ -2,7 +2,8 @@
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 
 import { Account } from '@/components/auth/account'
-import { getValues, setValue } from '@/data/value-test-table'
+import { getValues, setValue, validateRoomCode } from '@/data'
+import { sqids } from '@/lib/sqids'
 
 export const Route = createFileRoute('/')({
   component: Home,
@@ -30,11 +31,23 @@ function Home() {
         Add Entry
       </button>
       <ul>
-        {testValues.map((testValue) => (
-          <li key={testValue.id}>
-            {testValue.id} - {testValue.value}
-          </li>
-        ))}
+        {testValues.map((testValue) => {
+          const code = sqids.encode([testValue.id])
+          return (
+            <li key={testValue.id}>
+              {code} - {testValue.value}
+              <button
+                type="button"
+                onClick={async () => {
+                  const result = await validateRoomCode({ data: code })
+                  alert(`Result: ${result ? 'yes' : 'no'}`)
+                }}
+              >
+                Test
+              </button>
+            </li>
+          )
+        })}
       </ul>
     </>
   )
