@@ -1,5 +1,8 @@
-import React from 'react'
 import { Outlet, createRootRoute, HeadContent, Scripts } from '@tanstack/react-router'
+import React from 'react'
+
+import { TanStackQueryProvider } from '@/providers/tanstack-query'
+
 import globalCSS from '@/styles/global.css?url'
 
 export const Route = createRootRoute({
@@ -24,7 +27,9 @@ export const Route = createRootRoute({
 function RootComponent() {
   return (
     <RootDocument>
-      <Outlet />
+      <TanStackQueryProvider>
+        <Outlet />
+      </TanStackQueryProvider>
     </RootDocument>
   )
 }
@@ -40,7 +45,7 @@ function RootDocument(props: RootDocumentProps) {
         <HeadContent />
       </head>
       <body>
-        {props.children}
+        <div className="isolate">{props.children}</div>
         <Scripts />
       </body>
     </html>
