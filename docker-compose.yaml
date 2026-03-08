@@ -7,7 +7,7 @@ services:
     volumes:
       - vibe-check-pgdata:/var/lib/postgresql
     ports:
-      - "5432:5432"
+      - '5432:5432'
 
 volumes:
   vibe-check-pgdata:
