@@ -19,8 +19,9 @@ export const submission = pgTable('submission', {
   owner: text()
     .references(() => user.id)
     .notNull(),
-  from: text().notNull(),
-  to: text().notNull(),
+  prompt: integer()
+    .references(() => prompt.id)
+    .notNull(),
   target: numeric({ scale: 2, precision: 3 }).notNull(),
   hint: text(),
   timestamp: timestamp({ withTimezone: true, mode: 'date' }).defaultNow().notNull(),
@@ -29,4 +30,11 @@ export const submission = pgTable('submission', {
     result: 'played' | 'skipped' | 'banned'
     guess: number | undefined
   }>(),
+})
+
+export const prompt = pgTable('prompt', {
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  from: text().notNull(),
+  to: text().notNull(),
+  deactivated: timestamp({ withTimezone: true, mode: 'date' }),
 })

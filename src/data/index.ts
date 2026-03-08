@@ -1,14 +1,12 @@
-import { createServerFn, createServerOnlyFn } from '@tanstack/react-start'
+import { createServerFn } from '@tanstack/react-start'
 import { getRequest } from '@tanstack/react-start/server'
-import { and, asc, desc, eq, getTableColumns, inArray, isNotNull, isNull } from 'drizzle-orm'
+import { and, asc, desc, eq, getTableColumns, inArray, isNotNull, isNull, not } from 'drizzle-orm'
 import * as v from 'valibot'
 
 import db from '@/db'
-import { room, submission } from '@/db/schema'
+import { room, submission, prompt } from '@/db/schema'
 import { auth } from '@/lib/auth'
 import { sqids } from '@/lib/sqids'
-
-import options from './options.json'
 
 // Auth Logic
 export const getMe = createServerFn({
@@ -87,11 +85,6 @@ export const getRoom = createServerFn({
     return selectedRoom
   })
 
-const getPrompt = createServerOnlyFn(async () => {
-  const index = Math.floor(Math.random() * options.length)
-  return options[index]
-})
-
 export const getValidSubmission = createServerFn({ method: 'GET' })
   .inputValidator(
     v.object({
@@ -118,21 +111,38 @@ export const getValidSubmission = createServerFn({ method: 'GET' })
     )
     const validSubmissionCount = await db.$count(submission, submissionWhereClause)
     if (validSubmissionCount === 0) {
-      const prompt = await getPrompt()
+      const usedPrompts = await db
+        .select({ prompt: submission.prompt })
+        .from(submission)
+        .where(eq(submission.room, roomId))
+      const usedPromptIds = usedPrompts.map(({ prompt }) => prompt)
+
+      const prompts = await db
+        .select()
+        .from(prompt)
+        .where(and(isNull(prompt.deactivated), not(inArray(prompt.id, usedPromptIds))))
+      if (prompts.length === 0) {
+        return 'out-of-prompts'
+      }
+      const index = Math.floor(Math.random() * prompts.length)
+      const submissionPrompt = prompts[index]
       const target = Math.random().toPrecision(2)
-      console.log({ prompt, target })
       await db.insert(submission).values({
         room: roomId,
         owner: user.id,
-        from: prompt[0] ?? '',
-        to: prompt[1] ?? '',
+        prompt: submissionPrompt.id,
         target,
       })
     }
 
     const validSubmissions = await db
-      .select()
+      .select({
+        ...getTableColumns(submission),
+        from: prompt.from,
+        to: prompt.to,
+      })
       .from(submission)
+      .leftJoin(prompt, eq(submission.prompt, prompt.id))
       .where(submissionWhereClause)
       .orderBy(desc(submission.id))
       .limit(1)
@@ -183,9 +193,14 @@ export const getRoomCurrentSubmission = createServerFn({ method: 'GET' })
 
     // Get first unused submission for this room
     const submissionResult = await db
-      .select(getTableColumns(submission))
+      .select({
+        ...getTableColumns(submission),
+        from: prompt.from,
+        to: prompt.to,
+      })
       .from(submission)
       .leftJoin(room, eq(room.id, submission.room))
+      .leftJoin(prompt, eq(prompt.id, submission.prompt))
       .where(
         and(
           eq(submission.room, data.roomId),
@@ -227,9 +242,14 @@ export const getRoomNextSubmission = createServerFn({ method: 'GET' })
 
     // Get first unused submission for this room
     const submissionResult = await db
-      .select(getTableColumns(submission))
+      .select({
+        ...getTableColumns(submission),
+        from: prompt.from,
+        to: prompt.to,
+      })
       .from(submission)
       .leftJoin(room, eq(room.id, submission.room))
+      .leftJoin(prompt, eq(prompt.id, submission.prompt))
       .where(
         and(
           eq(submission.room, data.roomId),

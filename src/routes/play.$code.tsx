@@ -58,6 +58,10 @@ function RouteComponent() {
     return <div>Room is Closed!</div>
   }
 
+  if (submissionData === 'out-of-prompts') {
+    return <div>Out of prompts?!</div>
+  }
+
   return (
     <div className="flex flex-col gap-6">
       <div>
