@@ -14,7 +14,7 @@ export function CreateRoomButton() {
           return
         }
         router.navigate({
-          to: '/game/$code',
+          to: '/host/$code',
           params: {
             code: newRoom.code,
           },

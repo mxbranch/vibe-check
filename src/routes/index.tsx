@@ -25,7 +25,7 @@ function Home() {
     <div className="flex flex-col gap-6">
       <Account />
       {currentRoom && currentRoom !== 'unauthorized' && (
-        <Link to={'/game/$code'} params={{ code: currentRoom }}>
+        <Link to={'/host/$code'} params={{ code: currentRoom }}>
           Open Current Room
         </Link>
       )}

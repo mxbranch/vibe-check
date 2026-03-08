@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
-import { createFileRoute, useRouter } from '@tanstack/react-router'
+import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
 
-import { BanSubmissionButton } from '@/components/game/ban-submission'
-import { SkipSubmissionButton } from '@/components/game/skip-submission'
-import { getMe, getRoom, getRoomNextSubmission } from '@/data'
+import { CloseRoomButton } from '@/components/game/close-room'
+import { NextSubmissionButton } from '@/components/game/next-submission'
+import { getMe, getRoom, getRoomCurrentSubmission } from '@/data'
 
-export const Route = createFileRoute('/game/$code_/preview')({
+export const Route = createFileRoute('/host/$code')({
   component: RouteComponent,
   loader: async ({ params }) => {
     const room = await getRoom({ data: params.code })
@@ -20,6 +20,7 @@ export const Route = createFileRoute('/game/$code_/preview')({
 function RouteComponent() {
   const { room, user } = Route.useLoaderData()
   const router = useRouter()
+  const params = Route.useParams()
 
   if (!room || room.owner !== user?.id) {
     router.navigate({
@@ -32,9 +33,9 @@ function RouteComponent() {
   }
 
   const query = useQuery({
-    queryKey: ['game-preview', room.id],
+    queryKey: ['game-submission', room.id],
     queryFn: async () =>
-      await getRoomNextSubmission({
+      await getRoomCurrentSubmission({
         data: {
           roomId: room.id,
         },
@@ -62,14 +63,15 @@ function RouteComponent() {
           {submissionData.hint}
         </div>
       ) : (
-        <div>No Upcoming Submission!</div>
+        <div>No Current Submissions!</div>
       )}
+      <Link to={'/host/$code/preview'} params={params} target="_blank">
+        Open Preview
+      </Link>
       {submissionData && (
-        <>
-          <SkipSubmissionButton roomId={room.id} submissionId={submissionData.id} />
-          <BanSubmissionButton roomId={room.id} submissionId={submissionData.id} />
-        </>
+        <NextSubmissionButton roomId={room.id} submissionId={submissionData.id} guess={0.5} />
       )}
+      <CloseRoomButton roomId={room.id} />
     </div>
   )
 }

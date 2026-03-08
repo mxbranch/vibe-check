@@ -10,7 +10,8 @@
     "dev": "vite dev",
     "build": "vite build",
     "lint": "oxlint",
-    "format": "oxfmt ."
+    "format": "oxfmt .",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@base-ui/react": "^1.2.0",

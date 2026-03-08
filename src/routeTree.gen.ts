@@ -12,8 +12,8 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthErrorRouteImport } from './routes/auth-error'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PlayCodeRouteImport } from './routes/play.$code'
-import { Route as GameCodeRouteImport } from './routes/game.$code'
-import { Route as GameCodePreviewRouteImport } from './routes/game.$code_.preview'
+import { Route as HostCodeRouteImport } from './routes/host.$code'
+import { Route as HostCodePreviewRouteImport } from './routes/host.$code_.preview'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
 const AuthErrorRoute = AuthErrorRouteImport.update({
@@ -31,14 +31,14 @@ const PlayCodeRoute = PlayCodeRouteImport.update({
   path: '/play/$code',
   getParentRoute: () => rootRouteImport,
 } as any)
-const GameCodeRoute = GameCodeRouteImport.update({
-  id: '/game/$code',
-  path: '/game/$code',
+const HostCodeRoute = HostCodeRouteImport.update({
+  id: '/host/$code',
+  path: '/host/$code',
   getParentRoute: () => rootRouteImport,
 } as any)
-const GameCodePreviewRoute = GameCodePreviewRouteImport.update({
-  id: '/game/$code_/preview',
-  path: '/game/$code/preview',
+const HostCodePreviewRoute = HostCodePreviewRouteImport.update({
+  id: '/host/$code_/preview',
+  path: '/host/$code/preview',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
@@ -50,62 +50,62 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth-error': typeof AuthErrorRoute
-  '/game/$code': typeof GameCodeRoute
+  '/host/$code': typeof HostCodeRoute
   '/play/$code': typeof PlayCodeRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
-  '/game/$code/preview': typeof GameCodePreviewRoute
+  '/host/$code/preview': typeof HostCodePreviewRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth-error': typeof AuthErrorRoute
-  '/game/$code': typeof GameCodeRoute
+  '/host/$code': typeof HostCodeRoute
   '/play/$code': typeof PlayCodeRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
-  '/game/$code/preview': typeof GameCodePreviewRoute
+  '/host/$code/preview': typeof HostCodePreviewRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/auth-error': typeof AuthErrorRoute
-  '/game/$code': typeof GameCodeRoute
+  '/host/$code': typeof HostCodeRoute
   '/play/$code': typeof PlayCodeRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
-  '/game/$code_/preview': typeof GameCodePreviewRoute
+  '/host/$code_/preview': typeof HostCodePreviewRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/auth-error'
-    | '/game/$code'
+    | '/host/$code'
     | '/play/$code'
     | '/api/auth/$'
-    | '/game/$code/preview'
+    | '/host/$code/preview'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/auth-error'
-    | '/game/$code'
+    | '/host/$code'
     | '/play/$code'
     | '/api/auth/$'
-    | '/game/$code/preview'
+    | '/host/$code/preview'
   id:
     | '__root__'
     | '/'
     | '/auth-error'
-    | '/game/$code'
+    | '/host/$code'
     | '/play/$code'
     | '/api/auth/$'
-    | '/game/$code_/preview'
+    | '/host/$code_/preview'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthErrorRoute: typeof AuthErrorRoute
-  GameCodeRoute: typeof GameCodeRoute
+  HostCodeRoute: typeof HostCodeRoute
   PlayCodeRoute: typeof PlayCodeRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
-  GameCodePreviewRoute: typeof GameCodePreviewRoute
+  HostCodePreviewRoute: typeof HostCodePreviewRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -131,18 +131,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PlayCodeRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/game/$code': {
-      id: '/game/$code'
-      path: '/game/$code'
-      fullPath: '/game/$code'
-      preLoaderRoute: typeof GameCodeRouteImport
+    '/host/$code': {
+      id: '/host/$code'
+      path: '/host/$code'
+      fullPath: '/host/$code'
+      preLoaderRoute: typeof HostCodeRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/game/$code_/preview': {
-      id: '/game/$code_/preview'
-      path: '/game/$code/preview'
-      fullPath: '/game/$code/preview'
-      preLoaderRoute: typeof GameCodePreviewRouteImport
+    '/host/$code_/preview': {
+      id: '/host/$code_/preview'
+      path: '/host/$code/preview'
+      fullPath: '/host/$code/preview'
+      preLoaderRoute: typeof HostCodePreviewRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/auth/$': {
@@ -158,10 +158,10 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthErrorRoute: AuthErrorRoute,
-  GameCodeRoute: GameCodeRoute,
+  HostCodeRoute: HostCodeRoute,
   PlayCodeRoute: PlayCodeRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
-  GameCodePreviewRoute: GameCodePreviewRoute,
+  HostCodePreviewRoute: HostCodePreviewRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
