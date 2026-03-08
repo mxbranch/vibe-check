@@ -1,12 +1,14 @@
-import { createServerFn } from '@tanstack/react-start'
+import { createServerFn, createServerOnlyFn } from '@tanstack/react-start'
 import { getRequest } from '@tanstack/react-start/server'
 import { and, desc, eq, inArray, isNull } from 'drizzle-orm'
 import * as v from 'valibot'
 
 import db from '@/db'
-import { test, room } from '@/db/schema'
+import { room, submission } from '@/db/schema'
 import { auth } from '@/lib/auth'
 import { sqids } from '@/lib/sqids'
+
+import options from './options.json'
 
 // Auth Logic
 export const getMe = createServerFn({
@@ -85,18 +87,52 @@ export const getRoom = createServerFn({
     return selectedRoom
   })
 
-// Test Server Fns
-export const getValues = createServerFn({
-  method: 'GET',
-}).handler(async () => {
-  return await db.select().from(test).limit(5).orderBy(desc(test.id))
+const getPrompt = createServerOnlyFn(async () => {
+  const index = Math.floor(Math.random() * options.length)
+  return options[index]
 })
 
-export const setValue = createServerFn({ method: 'POST' })
-  .inputValidator(v.pipe(v.string(), v.trim()))
+export const getValidSubmission = createServerFn({ method: 'GET' })
+  .inputValidator(
+    v.object({
+      roomId: v.pipe(v.number(), v.integer()),
+    }),
+  )
   .handler(async ({ data }) => {
-    await db.insert(test).values({
-      value: data,
-    })
-    return { success: true }
+    const { roomId } = data
+    // Auth
+    const user = await getMe()
+    if (!user) return 'unauthorized'
+
+    // Check whether a valid submission exists
+    const submissionWhereClause = and(
+      eq(submission.owner, user.id),
+      eq(submission.room, roomId),
+      isNull(submission.used),
+    )
+    const validSubmissionCount = await db.$count(submission, submissionWhereClause)
+    if (validSubmissionCount === 0) {
+      const prompt = await getPrompt()
+      await db.insert(submission).values({
+        room: roomId,
+        owner: user.id,
+        from: prompt[0] ?? '',
+        to: prompt[1] ?? '',
+        target: Math.random().toPrecision(2),
+      })
+    }
+
+    const validSubmissions = await db
+      .select()
+      .from(submission)
+      .where(submissionWhereClause)
+      .orderBy(desc(submission.id))
+      .limit(1)
+    const validSubmission = validSubmissions[0]
+    return {
+      id: validSubmission.id,
+      from: validSubmission.from,
+      to: validSubmission.to,
+      target: validSubmission.target,
+    }
   })

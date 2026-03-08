@@ -2,6 +2,7 @@ import { useRouter } from '@tanstack/react-router'
 import React from 'react'
 
 import { validateRoomCode } from '@/data'
+import { sqids } from '@/lib/sqids'
 
 export function JoinRoomForm() {
   const [code, setCode] = React.useState<string>('')
@@ -24,6 +25,7 @@ export function JoinRoomForm() {
 
   return (
     <>
+      <span>{sqids.encode([6])}</span>
       <input
         className="border rounded-md"
         type="text"

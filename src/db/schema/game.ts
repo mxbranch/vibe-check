@@ -22,7 +22,7 @@ export const submission = pgTable('submission', {
   from: text().notNull(),
   to: text().notNull(),
   target: numeric({ scale: 2, precision: 1 }).notNull(),
-  hint: text().notNull(),
+  hint: text(),
   timestamp: timestamp({ withTimezone: true, mode: 'date' }).defaultNow().notNull(),
   used: json().$type<{
     timestamp: string
