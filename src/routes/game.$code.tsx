@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 
+import { CloseRoomButton } from '@/components/game/close-room'
 import { NextSubmissionButton } from '@/components/game/next-submission'
 import { getMe, getRoom, getRoomCurrentSubmission } from '@/data'
 
@@ -49,21 +50,25 @@ function RouteComponent() {
     return <div>Loading...</div>
   }
 
-  if (!submissionData) {
-    return <div>No Current Submissions!</div>
-  }
-
   if (submissionData === 'unauthorized') {
     return <div>Unauthorized</div>
   }
 
   return (
     <div className="flex flex-col gap-6">
-      <div>
-        {submissionData.owner} - {submissionData.from} - {submissionData.to} - {submissionData.hint}
-      </div>
+      {submissionData ? (
+        <div>
+          {submissionData.owner} - {submissionData.from} - {submissionData.to} -{' '}
+          {submissionData.hint}
+        </div>
+      ) : (
+        <div>No Current Submissions!</div>
+      )}
       <div>GUESSING TIME</div>
-      <NextSubmissionButton roomId={room.id} submissionId={submissionData.id} guess={0.5} />
+      {submissionData && (
+        <NextSubmissionButton roomId={room.id} submissionId={submissionData.id} guess={0.5} />
+      )}
+      <CloseRoomButton roomId={room.id} />
     </div>
   )
 }

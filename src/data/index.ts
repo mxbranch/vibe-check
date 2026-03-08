@@ -104,6 +104,12 @@ export const getValidSubmission = createServerFn({ method: 'GET' })
     const user = await getMe()
     if (!user || user.banned) return 'unauthorized'
 
+    // Check that room exists and is open
+    const roomCount = await db.$count(room, and(eq(room.id, roomId), isNull(room.gameEnded)))
+    if (roomCount === 0) {
+      return 'room-closed'
+    }
+
     // Check whether a valid submission exists
     const submissionWhereClause = and(
       eq(submission.owner, user.id),
@@ -277,4 +283,38 @@ export const markSubmissionPlayed = createServerFn({ method: 'POST' })
         },
       })
       .where(and(eq(submission.room, data.roomId), eq(submission.id, data.submissionId)))
+  })
+
+export const closeRoom = createServerFn({ method: 'POST' })
+  .inputValidator(
+    v.object({
+      roomId: v.pipe(v.number(), v.integer()),
+    }),
+  )
+  .handler(async ({ data }) => {
+    // Auth
+    const user = await getMe()
+    const allowed = user?.role === 'admin' && !user.banned
+    if (!allowed) return 'unauthorized'
+
+    // Update room
+    const now = new Date()
+    await db
+      .update(room)
+      .set({
+        gameEnded: now,
+      })
+      .where(and(eq(room.id, data.roomId)))
+
+    // Update submissions
+    await db
+      .update(submission)
+      .set({
+        used: {
+          timestamp: now.toISOString(),
+          result: 'skipped',
+          guess: undefined,
+        },
+      })
+      .where(and(eq(submission.room, data.roomId)))
   })

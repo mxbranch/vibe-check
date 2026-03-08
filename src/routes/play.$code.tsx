@@ -54,6 +54,10 @@ function RouteComponent() {
     return <div>Unauthorized</div>
   }
 
+  if (submissionData === 'room-closed') {
+    return <div>Room is Closed!</div>
+  }
+
   return (
     <div className="flex flex-col gap-6">
       <div>
