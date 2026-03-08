@@ -258,12 +258,16 @@ export const getRoomNextSubmission = createServerFn({ method: 'GET' })
     }
   })
 
-export const markSubmissionPlayed = createServerFn({ method: 'POST' })
+export const markSubmissionUsed = createServerFn({ method: 'POST' })
   .inputValidator(
     v.object({
       roomId: v.pipe(v.number(), v.integer()),
       submissionId: v.pipe(v.number(), v.integer()),
       guess: v.pipe(v.number()),
+      result: v.optional(
+        v.union([v.literal('played'), v.literal('banned'), v.literal('skipped')]),
+        'played',
+      ),
     }),
   )
   .handler(async ({ data }) => {
@@ -273,16 +277,27 @@ export const markSubmissionPlayed = createServerFn({ method: 'POST' })
     if (!allowed) return 'unauthorized'
 
     const now = new Date()
-    await db
+    const updatedSubmission = await db
       .update(submission)
       .set({
         used: {
           timestamp: now.toISOString(),
-          result: 'played',
+          result: data.result,
           guess: data.guess,
         },
       })
       .where(and(eq(submission.room, data.roomId), eq(submission.id, data.submissionId)))
+      .returning({ owner: submission.owner })
+    if (data.result === 'banned') {
+      const { owner } = updatedSubmission[0]
+      const request = getRequest()
+      await auth.api.banUser({
+        body: {
+          userId: owner,
+        },
+        headers: request.headers,
+      })
+    }
   })
 
 export const closeRoom = createServerFn({ method: 'POST' })

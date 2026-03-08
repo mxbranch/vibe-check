@@ -1,6 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 
+import { BanSubmissionButton } from '@/components/game/ban-submission'
+import { SkipSubmissionButton } from '@/components/game/skip-submission'
 import { getMe, getRoom, getRoomNextSubmission } from '@/data'
 
 export const Route = createFileRoute('/game/$code_/preview')({
@@ -61,6 +63,12 @@ function RouteComponent() {
         </div>
       ) : (
         <div>No Upcoming Submission!</div>
+      )}
+      {submissionData && (
+        <>
+          <SkipSubmissionButton roomId={room.id} submissionId={submissionData.id} />
+          <BanSubmissionButton roomId={room.id} submissionId={submissionData.id} />
+        </>
       )}
     </div>
   )

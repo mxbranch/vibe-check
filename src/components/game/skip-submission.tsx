@@ -1,0 +1,33 @@
+import { useQueryClient } from '@tanstack/react-query'
+
+import { markSubmissionUsed } from '@/data'
+
+type Props = Readonly<{
+  roomId: number
+  submissionId: number
+}>
+
+export function SkipSubmissionButton(props: Props) {
+  const { roomId, submissionId } = props
+  const queryClient = useQueryClient()
+
+  async function handleClick() {
+    await markSubmissionUsed({ data: { roomId, submissionId, guess: 0.0, result: 'skipped' } })
+    await queryClient.refetchQueries({
+      queryKey: ['game-submission', roomId],
+    })
+    await queryClient.refetchQueries({
+      queryKey: ['game-preview', roomId],
+    })
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={handleClick}
+      className="border border-amber-500 bg-amber-50 px-1.5 py-1"
+    >
+      SKIP SUBMISSION
+    </button>
+  )
+}

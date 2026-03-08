@@ -1,6 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query'
 
-import { markSubmissionPlayed } from '@/data'
+import { markSubmissionUsed } from '@/data'
 
 type Props = Readonly<{
   roomId: number
@@ -13,9 +13,12 @@ export function NextSubmissionButton(props: Props) {
   const queryClient = useQueryClient()
 
   async function handleClick() {
-    await markSubmissionPlayed({ data: { roomId, submissionId, guess } })
+    await markSubmissionUsed({ data: { roomId, submissionId, guess } })
     await queryClient.refetchQueries({
       queryKey: ['game-submission', roomId],
+    })
+    await queryClient.refetchQueries({
+      queryKey: ['game-preview', roomId],
     })
   }
 
