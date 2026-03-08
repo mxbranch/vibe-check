@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { createFileRoute, useRouter } from '@tanstack/react-router'
+import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
 
 import { CloseRoomButton } from '@/components/game/close-room'
 import { NextSubmissionButton } from '@/components/game/next-submission'
@@ -20,6 +20,7 @@ export const Route = createFileRoute('/game/$code')({
 function RouteComponent() {
   const { room, user } = Route.useLoaderData()
   const router = useRouter()
+  const params = Route.useParams()
 
   if (!room || room.owner !== user?.id) {
     router.navigate({
@@ -64,7 +65,9 @@ function RouteComponent() {
       ) : (
         <div>No Current Submissions!</div>
       )}
-      <div>GUESSING TIME</div>
+      <Link to={'/game/$code/preview'} params={params} target="_blank">
+        Open Preview
+      </Link>
       {submissionData && (
         <NextSubmissionButton roomId={room.id} submissionId={submissionData.id} guess={0.5} />
       )}
