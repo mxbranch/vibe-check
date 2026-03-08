@@ -100,6 +100,25 @@ export const getRoom = createServerFn({
     return selectedRoom
   })
 
+export const getUserCurrentRoom = createServerFn({
+  method: 'GET',
+}).handler(async () => {
+  // Auth
+  const user = await getMe()
+  if (!user || user.banned) return 'unauthorized'
+
+  const rooms = await db
+    .select()
+    .from(room)
+    .where(and(isNull(room.gameEnded), eq(room.owner, user.id)))
+    .orderBy(desc(room.id))
+    .limit(1)
+  if (rooms.length === 0) {
+    return null
+  }
+  return sqids.encode([rooms[0].id])
+})
+
 export const getValidSubmission = createServerFn({ method: 'GET' })
   .inputValidator(
     v.object({
