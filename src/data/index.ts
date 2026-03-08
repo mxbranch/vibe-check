@@ -49,15 +49,30 @@ export const createRoom = createServerFn({
   const allowed = user?.role === 'admin' && !user.banned
   if (!allowed) return 'unauthorized'
 
-  // If previous room exists, close
-  await db
+  // If previous room(s) exists, close
+  const updatedRooms = await db
     .update(room)
     .set({
       gameEnded: new Date(),
     })
     .where(and(eq(room.owner, user.id), isNull(room.gameEnded)))
+    .returning({ id: room.id })
+  // Update submissions for existing room(s)
+  const now = new Date()
+  for (const updatedRoom of updatedRooms) {
+    await db
+      .update(submission)
+      .set({
+        used: {
+          timestamp: now.toISOString(),
+          result: 'skipped',
+          guess: undefined,
+        },
+      })
+      .where(and(eq(submission.room, updatedRoom.id)))
+  }
 
-  // Create new rooms
+  // Create new room
   const newRoom = await db
     .insert(room)
     .values({
