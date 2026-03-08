@@ -38,7 +38,8 @@ function RouteComponent() {
           roomId: room.id,
         },
       }),
-    staleTime: Infinity,
+    refetchOnMount: false,
+    refetchInterval: 1000 * 10,
     retry: false,
   })
 
