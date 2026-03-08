@@ -27,5 +27,6 @@ export const submission = pgTable('submission', {
   used: json().$type<{
     timestamp: string
     result: 'played' | 'skipped' | 'banned'
+    guess: number | undefined
   }>(),
 })

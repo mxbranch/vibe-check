@@ -63,7 +63,7 @@ function RouteComponent() {
         {submissionData.owner} - {submissionData.from} - {submissionData.to} - {submissionData.hint}
       </div>
       <div>GUESSING TIME</div>
-      <NextSubmissionButton roomId={room.id} submissionId={submissionData.id} />
+      <NextSubmissionButton roomId={room.id} submissionId={submissionData.id} guess={0.5} />
     </div>
   )
 }

@@ -257,6 +257,7 @@ export const markSubmissionPlayed = createServerFn({ method: 'POST' })
     v.object({
       roomId: v.pipe(v.number(), v.integer()),
       submissionId: v.pipe(v.number(), v.integer()),
+      guess: v.pipe(v.number()),
     }),
   )
   .handler(async ({ data }) => {
@@ -272,6 +273,7 @@ export const markSubmissionPlayed = createServerFn({ method: 'POST' })
         used: {
           timestamp: now.toISOString(),
           result: 'played',
+          guess: data.guess,
         },
       })
       .where(and(eq(submission.room, data.roomId), eq(submission.id, data.submissionId)))
