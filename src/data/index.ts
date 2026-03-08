@@ -1,6 +1,6 @@
 import { createServerFn, createServerOnlyFn } from '@tanstack/react-start'
 import { getRequest } from '@tanstack/react-start/server'
-import { and, desc, eq, inArray, isNull } from 'drizzle-orm'
+import { and, asc, desc, eq, getTableColumns, inArray, isNotNull, isNull } from 'drizzle-orm'
 import * as v from 'valibot'
 
 import db from '@/db'
@@ -161,4 +161,118 @@ export const postSubmission = createServerFn({ method: 'POST' })
         hint: data.hint,
       })
       .where(and(eq(submission.id, data.submissionId), eq(submission.owner, user.id)))
+  })
+
+export const getRoomCurrentSubmission = createServerFn({ method: 'GET' })
+  .inputValidator(
+    v.object({
+      roomId: v.pipe(v.number(), v.integer()),
+    }),
+  )
+  .handler(async ({ data }) => {
+    // Auth
+    const user = await getMe()
+    const allowed = user?.role === 'admin' && !user.banned
+    if (!allowed) return 'unauthorized'
+
+    // Get first unused submission for this room
+    const submissionResult = await db
+      .select(getTableColumns(submission))
+      .from(submission)
+      .leftJoin(room, eq(room.id, submission.room))
+      .where(
+        and(
+          eq(submission.room, data.roomId),
+          eq(room.owner, user.id),
+          isNull(submission.used),
+          isNotNull(submission.hint),
+        ),
+      )
+      .limit(1)
+      .orderBy(asc(submission.id))
+
+    const activeSubmission = submissionResult[0]
+
+    if (!activeSubmission) {
+      return null
+    }
+
+    return {
+      id: activeSubmission.id,
+      owner: activeSubmission.owner,
+      from: activeSubmission.from,
+      to: activeSubmission.to,
+      target: activeSubmission.target,
+      hint: activeSubmission.hint,
+    }
+  })
+
+export const getRoomNextSubmission = createServerFn({ method: 'GET' })
+  .inputValidator(
+    v.object({
+      roomId: v.pipe(v.number(), v.integer()),
+    }),
+  )
+  .handler(async ({ data }) => {
+    // Auth
+    const user = await getMe()
+    const allowed = user?.role === 'admin' && !user.banned
+    if (!allowed) return 'unauthorized'
+
+    // Get first unused submission for this room
+    const submissionResult = await db
+      .select(getTableColumns(submission))
+      .from(submission)
+      .leftJoin(room, eq(room.id, submission.room))
+      .where(
+        and(
+          eq(submission.room, data.roomId),
+          eq(room.owner, user.id),
+          isNull(submission.used),
+          isNotNull(submission.hint),
+        ),
+      )
+      .offset(1)
+      .limit(1)
+      .orderBy(asc(submission.id))
+
+    const activeSubmission = submissionResult[0]
+
+    if (!activeSubmission) {
+      return null
+    }
+
+    return {
+      id: activeSubmission.id,
+      owner: activeSubmission.owner,
+      from: activeSubmission.from,
+      to: activeSubmission.to,
+      target: activeSubmission.target,
+      hint: activeSubmission.hint,
+    }
+  })
+
+export const markSubmissionPlayed = createServerFn({ method: 'POST' })
+  .inputValidator(
+    v.object({
+      roomId: v.pipe(v.number(), v.integer()),
+      submissionId: v.pipe(v.number(), v.integer()),
+    }),
+  )
+  .handler(async ({ data }) => {
+    // Auth
+    const user = await getMe()
+    const allowed = user?.role === 'admin' && !user.banned
+    if (!allowed) return 'unauthorized'
+
+    const now = new Date()
+    await db
+      .update(submission)
+      .set({
+        used: {
+          timestamp: now.toISOString(),
+          result: 'played',
+        },
+      })
+      .where(and(eq(submission.room, data.roomId), eq(submission.id, data.submissionId)))
   })

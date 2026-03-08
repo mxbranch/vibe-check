@@ -9,7 +9,7 @@ export function TwitchSignoutButton() {
 
   const clickHandler = async () => {
     await authClient.signOut()
-    queryClient.refetchQueries({
+    await queryClient.refetchQueries({
       queryKey: ['getMe'],
     })
     router.invalidate()

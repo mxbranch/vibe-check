@@ -19,7 +19,7 @@ export function CreateSubmissionForm(props: Props) {
     } as PostSubmissionSchema,
     onSubmit: async ({ value }) => {
       await postSubmission({ data: value })
-      queryClient.refetchQueries({
+      await queryClient.refetchQueries({
         queryKey: ['play-submission', roomId],
       })
     },

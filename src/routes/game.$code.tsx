@@ -1,6 +1,8 @@
+import { useQuery } from '@tanstack/react-query'
 import { createFileRoute, useRouter } from '@tanstack/react-router'
 
-import { getMe, getRoom } from '@/data'
+import { NextSubmissionButton } from '@/components/game/next-submission'
+import { getMe, getRoom, getRoomCurrentSubmission } from '@/data'
 
 export const Route = createFileRoute('/game/$code')({
   component: RouteComponent,
@@ -15,7 +17,6 @@ export const Route = createFileRoute('/game/$code')({
 })
 
 function RouteComponent() {
-  const { code } = Route.useParams()
   const { room, user } = Route.useLoaderData()
   const router = useRouter()
 
@@ -29,5 +30,39 @@ function RouteComponent() {
     return
   }
 
-  return <div>Hello "/game/{code}"!</div>
+  const query = useQuery({
+    queryKey: ['game-submission', room.id],
+    queryFn: async () =>
+      await getRoomCurrentSubmission({
+        data: {
+          roomId: room.id,
+        },
+      }),
+    staleTime: Infinity,
+    retry: false,
+  })
+
+  const submissionData = query.data
+
+  if (query.isPending) {
+    return <div>Loading...</div>
+  }
+
+  if (!submissionData) {
+    return <div>No Current Submissions!</div>
+  }
+
+  if (submissionData === 'unauthorized') {
+    return <div>Unauthorized</div>
+  }
+
+  return (
+    <div className="flex flex-col gap-6">
+      <div>
+        {submissionData.owner} - {submissionData.from} - {submissionData.to} - {submissionData.hint}
+      </div>
+      <div>GUESSING TIME</div>
+      <NextSubmissionButton roomId={room.id} submissionId={submissionData.id} />
+    </div>
+  )
 }
