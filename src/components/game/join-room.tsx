@@ -44,6 +44,12 @@ export function JoinRoomForm() {
               setCode(newCode.toUpperCase())
             }
           }}
+          onKeyDown={(e) => {
+            e.preventDefault()
+            if (e.key === 'Enter') {
+              clickHandler()
+            }
+          }}
           id="code-input"
         />
         <Button
