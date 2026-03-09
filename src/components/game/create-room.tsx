@@ -1,5 +1,5 @@
 import { useRouter } from '@tanstack/react-router'
-import { Gamepad2Icon, PlusCircleIcon } from 'lucide-react'
+import { PlusIcon } from 'lucide-react'
 
 import { createRoom } from '@/data'
 
@@ -24,8 +24,8 @@ export function CreateRoomButton() {
         })
       }}
     >
-      <PlusCircleIcon />
-      Create Room
+      <PlusIcon />
+      New Room
     </Button>
   )
 }
