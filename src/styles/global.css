@@ -10,3 +10,7 @@
   --shadow-solid: 2rem 2rem 0 var(--tw-text-shadow-color, rgb(0 0 0 / 0.2));
   --animate-spin-slow: spin 120s linear infinite;
 }
+
+:root {
+  overscroll-behavior: none;
+}

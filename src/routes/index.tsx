@@ -9,12 +9,15 @@ import { JoinRoomForm } from '@/components/game/join-room'
 import { ButtonLink } from '@/components/ui/button'
 import { getMe, getUserCurrentRoom } from '@/data'
 
+const slogans = ['For Jackdaw Dot Television', 'Based On The Hit TV Series']
+
 export const Route = createFileRoute('/')({
   component: Home,
   loader: async () => {
     const user = await getMe()
     const currentRoom = await getUserCurrentRoom()
-    return { user, currentRoom }
+    const sloganIndex = Math.floor(Math.random() * slogans.length)
+    return { user, currentRoom, slogan: slogans[sloganIndex] }
   },
   head: () => ({
     meta: [{ title: 'Vibe Check! for Jackdaw Dot Television' }],
@@ -22,15 +25,13 @@ export const Route = createFileRoute('/')({
 })
 
 function Home() {
-  const { user, currentRoom } = Route.useLoaderData()
+  const { user, currentRoom, slogan } = Route.useLoaderData()
 
   return (
     <div className="absolute inset-0 mx-auto flex w-fit flex-col items-center justify-center gap-6">
       <div className="flex flex-col">
         <h1 className="text-center font-fredoka text-8xl">Vibe Check!</h1>
-        <div className="-mt-3 rotate-2 text-right font-normal text-purple-200">
-          For Jackdaw Dot Television
-        </div>
+        <div className="-mt-3 rotate-2 text-right font-normal text-purple-200">{slogan}</div>
       </div>
       {!user && <TwitchSigninButton />}
       {user && (
