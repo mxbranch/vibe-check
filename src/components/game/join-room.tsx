@@ -45,7 +45,6 @@ export function JoinRoomForm() {
             }
           }}
           onKeyDown={(e) => {
-            e.preventDefault()
             if (e.key === 'Enter') {
               clickHandler()
             }
