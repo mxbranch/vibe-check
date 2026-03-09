@@ -3,5 +3,10 @@
   "ignorePatterns": [],
   "singleQuote": true,
   "semi": false,
-  "sortImports": {}
+  "sortImports": {},
+  "sortTailwindcss": {
+    "stylesheet": "./src/styles/global.css",
+    "functions": ["clsx", "cn"],
+    "preserveWhitespace": true
+  }
 }

@@ -1,26 +1,29 @@
 import { Avatar as AvatarPrimitive } from '@base-ui/react'
 import { CrownIcon, XIcon } from 'lucide-react'
 
+import { cn } from '@/lib/cn'
+
 type Props = Readonly<{
   banned?: boolean
+  className?: string
   crown?: boolean
   imgSrc?: string
   name?: string
 }>
 
 export function Avatar(props: Props) {
-  const { banned = false, crown = false, imgSrc, name } = props
+  const { banned = false, className, crown = false, imgSrc, name } = props
   const { Root, Image, Fallback } = AvatarPrimitive
 
   return (
-    <div className="size-12 inline-flex items-center justify-center relative">
-      {banned && <XIcon className="stroke-red-500 absolute inset-auto size-8" />}
+    <div className={cn('relative inline-flex size-12 items-center justify-center', className)}>
+      {banned && <XIcon className="absolute inset-auto size-8 stroke-red-500" />}
       {crown && (
-        <CrownIcon className="stroke-amber-400 fill-amber-400 absolute -top-2 right-auto left-auto" />
+        <CrownIcon className="absolute -top-4 right-auto left-auto size-6 fill-yellow-300 stroke-yellow-300" />
       )}
-      <Root className="size-12 inline-flex items-center justify-center overflow-clip rounded-full bg-gray-200 select-none">
+      <Root className="inline-flex size-full items-center justify-center overflow-clip rounded-full bg-gray-200 select-none">
         <Image src={imgSrc} className="size-full object-cover" />
-        <Fallback className="size-full flex items-center justify-center font-semibold">
+        <Fallback className="flex size-full items-center justify-center font-semibold">
           {name?.slice(0, 2) ?? 'XX'}
         </Fallback>
       </Root>

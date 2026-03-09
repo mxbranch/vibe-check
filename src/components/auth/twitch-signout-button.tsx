@@ -1,7 +1,10 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { useRouter } from '@tanstack/react-router'
+import { LogOutIcon } from 'lucide-react'
 
 import { authClient } from '@/lib/auth-client'
+
+import { Button } from '../ui/button'
 
 export function TwitchSignoutButton() {
   const router = useRouter()
@@ -16,8 +19,8 @@ export function TwitchSignoutButton() {
   }
 
   return (
-    <button type="button" onClick={clickHandler}>
-      Sign Out
-    </button>
+    <Button type="button" onClick={clickHandler}>
+      <LogOutIcon /> Sign Out
+    </Button>
   )
 }

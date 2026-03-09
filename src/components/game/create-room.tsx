@@ -1,11 +1,14 @@
 import { useRouter } from '@tanstack/react-router'
+import { Gamepad2Icon, PlusCircleIcon } from 'lucide-react'
 
 import { createRoom } from '@/data'
+
+import { Button } from '../ui/button'
 
 export function CreateRoomButton() {
   const router = useRouter()
   return (
-    <button
+    <Button
       type="button"
       onClick={async () => {
         const newRoom = await createRoom()
@@ -21,7 +24,8 @@ export function CreateRoomButton() {
         })
       }}
     >
+      <PlusCircleIcon />
       Create Room
-    </button>
+    </Button>
   )
 }

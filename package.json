@@ -15,12 +15,15 @@
   },
   "dependencies": {
     "@base-ui/react": "^1.2.0",
+    "@fontsource-variable/bricolage-grotesque": "^5.2.10",
+    "@fontsource/fredoka-one": "^5.2.5",
     "@tailwindcss/vite": "^4.2.1",
     "@tanstack/react-form": "^1.28.4",
     "@tanstack/react-query": "^5.90.21",
     "@tanstack/react-router": "^1.166.2",
     "@tanstack/react-start": "^1.166.2",
     "better-auth": "^1.5.4",
+    "clsx": "^2.1.1",
     "dotenv": "^17.3.1",
     "drizzle-orm": "^0.45.1",
     "lucide-react": "^0.577.0",
@@ -28,6 +31,7 @@
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "sqids": "^0.3.0",
+    "tailwind-merge": "^3.5.0",
     "tailwindcss": "^4.2.1",
     "valibot": "^1.2.0"
   },

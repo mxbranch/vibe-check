@@ -1,1 +1,12 @@
-@import 'tailwindcss';
+@import "tailwindcss";
+@import "@fontsource/fredoka-one";
+@import "@fontsource-variable/bricolage-grotesque";
+
+@theme {
+  --font-sans:
+    "Bricolage Grotesque Variable", ui-sans-serif, system-ui, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-fredoka: "Fredoka One", var(--font-sans);
+  --shadow-solid: 2rem 2rem 0 var(--tw-text-shadow-color, rgb(0 0 0 / 0.2));
+  --animate-spin-slow: spin 120s linear infinite;
+}

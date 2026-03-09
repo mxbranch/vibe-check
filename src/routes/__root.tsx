@@ -1,6 +1,7 @@
 import { Outlet, createRootRoute, HeadContent, Scripts } from '@tanstack/react-router'
 import React from 'react'
 
+import radialStripes from '@/assets/radial-stripes.svg'
 import { TanStackQueryProvider } from '@/providers/tanstack-query'
 
 import globalCSS from '@/styles/global.css?url'
@@ -44,10 +45,18 @@ function RootDocument(props: RootDocumentProps) {
       <head>
         <HeadContent />
       </head>
-      <body>
-        <div className="isolate">{props.children}</div>
+      <body className="bg-purple-950 text-lg font-medium text-purple-100">
+        <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
+          <img
+            src={radialStripes}
+            className="animate-spin-slow object-cover object-center mix-blend-screen"
+          />
+        </div>
+        <div className="relative isolate min-h-svh w-full">{props.children}</div>
         <Scripts />
       </body>
     </html>
   )
 }
+
+//
