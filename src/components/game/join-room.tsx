@@ -43,6 +43,9 @@ export function JoinRoomForm() {
             if (newCode === '' || lettersOnly.test(newCode.toUpperCase())) {
               setCode(newCode.toUpperCase())
             }
+            if (newCode === '') {
+              setFeedback('Enter Code To Play!')
+            }
           }}
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
