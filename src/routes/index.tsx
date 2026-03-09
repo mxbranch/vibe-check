@@ -35,19 +35,22 @@ function Home() {
       <div className="flex h-full w-full max-w-xl flex-col justify-center gap-6 p-3 lg:gap-8">
         <div className="relative">
           <h1 className="text-center font-fredoka text-5xl md:text-6xl lg:text-8xl">Vibe Check!</h1>
-          <div className="rotate-2 text-sm font-normal text-nowrap text-purple-200 capitalize md:text-base lg:-mt-3 lg:text-right">
+          <div className="rotate-2 text-center text-sm font-normal text-nowrap text-purple-200 capitalize md:text-base lg:-mt-3 lg:text-right">
             {slogan}
           </div>
         </div>
         {!user && <TwitchSigninButton />}
         {user && (
           <div className="flex w-full items-center justify-between">
-            <Avatar
-              banned={user.banned ?? false}
-              crown={user.role === 'admin'}
-              imgSrc={user.image ?? undefined}
-              name={user.username}
-            />
+            <div className="flex items-center gap-2">
+              <Avatar
+                banned={user.banned ?? false}
+                crown={user.role === 'admin'}
+                imgSrc={user.image ?? undefined}
+                name={user.username}
+              />
+              <span className="hidden md:inline">{user.username}</span>
+            </div>
             <TwitchSignoutButton />
           </div>
         )}
