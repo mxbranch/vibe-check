@@ -2,6 +2,7 @@ import { Outlet, createRootRoute, HeadContent, Scripts } from '@tanstack/react-r
 import React from 'react'
 
 import { Footer } from '@/components/layout/footer'
+import { Konami } from '@/components/layout/konami'
 import { TanStackQueryProvider } from '@/providers/tanstack-query'
 
 import globalCSS from '@/styles/global.css?url'
@@ -57,6 +58,7 @@ function RootDocument(props: RootDocumentProps) {
           {props.children}
         </div>
         <Footer />
+        <Konami />
         <Scripts />
       </body>
     </html>
