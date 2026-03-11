@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
-import { LoaderIcon, LockIcon, SearchIcon } from 'lucide-react'
+import { FrownIcon, LoaderIcon, LockIcon, SearchIcon } from 'lucide-react'
 
 import { CloseRoomButton } from '@/components/game/close-room'
 import { NextSubmissionButton } from '@/components/game/next-submission'
@@ -83,11 +83,10 @@ function RouteComponent() {
             {submissionData.hint}
           </div>
         ) : (
-          <div>No Current Submissions!</div>
+          <div className="inline-flex rotate-2 items-center gap-3 text-4xl">
+            No Current Submissions! <FrownIcon className="size-9" />
+          </div>
         )}
-        <Link to={'/host/$code/preview'} params={params} target="_blank">
-          Open Preview
-        </Link>
         {submissionData && (
           <NextSubmissionButton roomId={room.id} submissionId={submissionData.id} guess={0.5} />
         )}
