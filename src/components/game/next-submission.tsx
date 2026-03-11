@@ -2,6 +2,8 @@ import { useQueryClient } from '@tanstack/react-query'
 
 import { markSubmissionUsed } from '@/data'
 
+import { Button } from '../ui/button'
+
 type Props = Readonly<{
   roomId: number
   submissionId: number
@@ -23,8 +25,8 @@ export function NextSubmissionButton(props: Props) {
   }
 
   return (
-    <button type="button" onClick={handleClick}>
+    <Button type="button" onClick={handleClick}>
       NEXT SUBMISSION
-    </button>
+    </Button>
   )
 }

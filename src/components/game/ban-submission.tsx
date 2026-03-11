@@ -2,6 +2,8 @@ import { useQueryClient } from '@tanstack/react-query'
 
 import { markSubmissionUsed } from '@/data'
 
+import { Button } from '../ui/button'
+
 type Props = Readonly<{
   roomId: number
   submissionId: number
@@ -22,12 +24,8 @@ export function BanSubmissionButton(props: Props) {
   }
 
   return (
-    <button
-      type="button"
-      onClick={handleClick}
-      className="border border-red-500 bg-red-50 px-1.5 py-1"
-    >
+    <Button type="button" onClick={handleClick}>
       BAN USER FOR SUBMISSION
-    </button>
+    </Button>
   )
 }

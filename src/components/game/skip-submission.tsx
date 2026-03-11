@@ -2,6 +2,8 @@ import { useQueryClient } from '@tanstack/react-query'
 
 import { markSubmissionUsed } from '@/data'
 
+import { Button } from '../ui/button'
+
 type Props = Readonly<{
   roomId: number
   submissionId: number
@@ -22,12 +24,8 @@ export function SkipSubmissionButton(props: Props) {
   }
 
   return (
-    <button
-      type="button"
-      onClick={handleClick}
-      className="border border-amber-500 bg-amber-50 px-1.5 py-1"
-    >
+    <Button type="button" onClick={handleClick}>
       SKIP SUBMISSION
-    </button>
+    </Button>
   )
 }

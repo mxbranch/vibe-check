@@ -11,7 +11,8 @@ export function TwitchSigninButton() {
   }
 
   return (
-    <Button type="button" onClick={clickHandler}>
+    <Button type="button" onClick={clickHandler} className="relative overflow-clip">
+      <div className="absolute inset-0 animate-pulse bg-mauve-50/15" />
       <TwitchIcon className="size-4" /> Sign In With Twitch
     </Button>
   )

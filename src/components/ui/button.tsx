@@ -18,7 +18,7 @@ export function Button(props: ButtonProps) {
 
 function ButtonLinkStyled(props: ButtonProps) {
   const { className, render: _, ...rest } = props
-  return <Button className={className} render={<a />} {...rest} />
+  return <Button nativeButton={false} className={className} render={<a />} {...rest} />
 }
 
 export const ButtonLink = createLink(ButtonLinkStyled)
