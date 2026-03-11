@@ -39,22 +39,28 @@ function Home() {
             {slogan}
           </div>
         </div>
-        {!user && <TwitchSigninButton />}
-        {user && (
-          <div className="flex w-full items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Avatar
-                banned={user.banned ?? false}
-                crown={user.role === 'admin'}
-                imgSrc={user.image ?? undefined}
-                name={user.username}
-              />
-              <span className="hidden md:inline">{user.username}</span>
-            </div>
-            <TwitchSignoutButton />
+        {!user && (
+          <div className="flex w-full items-center justify-center">
+            <TwitchSigninButton />
           </div>
         )}
-        <Separator />
+        {user && (
+          <>
+            <div className="flex w-full items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Avatar
+                  banned={user.banned ?? false}
+                  crown={user.role === 'admin'}
+                  imgSrc={user.image ?? undefined}
+                  name={user.username}
+                />
+                <span className="hidden md:inline">{user.username}</span>
+              </div>
+              <TwitchSignoutButton />
+            </div>
+            <Separator />
+          </>
+        )}
         {user?.role === 'admin' && (
           <>
             <div

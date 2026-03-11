@@ -1,6 +1,9 @@
 import { useRouter } from '@tanstack/react-router'
+import { XIcon } from 'lucide-react'
 
 import { closeRoom } from '@/data'
+
+import { Button } from '../ui/button'
 
 type Props = Readonly<{
   roomId: number
@@ -9,7 +12,7 @@ type Props = Readonly<{
 export function CloseRoomButton(props: Props) {
   const router = useRouter()
   return (
-    <button
+    <Button
       type="button"
       onClick={async () => {
         await closeRoom({ data: props })
@@ -18,7 +21,7 @@ export function CloseRoomButton(props: Props) {
         })
       }}
     >
-      Close Room
-    </button>
+      <XIcon /> Close Room
+    </Button>
   )
 }
