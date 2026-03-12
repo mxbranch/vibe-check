@@ -4,7 +4,6 @@ import { LoaderIcon, LockIcon } from 'lucide-react'
 
 import { UserBadge } from '@/components/auth/user-badge'
 import { BanSubmissionButton } from '@/components/game/ban-submission'
-import { CloseRoomButton } from '@/components/game/close-room'
 import { SkipSubmissionButton } from '@/components/game/skip-submission'
 import { DismissableBanner } from '@/components/ui/dismissable-banner'
 import { Separator } from '@/components/ui/separator'
@@ -91,7 +90,7 @@ function RouteComponent() {
         {submissionData ? (
           <>
             The next submission will be from:
-            <UserBadge userId={submissionData.owner} className="shrink-0" />
+            <UserBadge userId={submissionData.owner} />
             <Separator text="who was given the prompt..." />
             <div>
               {submissionData.from} to {submissionData.to}

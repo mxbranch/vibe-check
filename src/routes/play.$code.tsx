@@ -1,7 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
-import { createFileRoute, useRouter } from '@tanstack/react-router'
+import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
+import { LoaderIcon, LockIcon, SmileIcon } from 'lucide-react'
 
 import { CreateSubmissionForm } from '@/components/game/create-submission'
+import { PlayerVisualiser } from '@/components/game/player-visualiser'
 import { getMe, getRoom, getValidSubmission } from '@/data'
 
 export const Route = createFileRoute('/play/$code')({
@@ -24,7 +26,10 @@ function RouteComponent() {
   const router = useRouter()
 
   if (!room) {
-    return <div>Room doesn't exist! Sorry</div>
+    router.navigate({
+      to: '/',
+    })
+    return
   }
   if (!user) {
     router.navigate({
@@ -43,36 +48,72 @@ function RouteComponent() {
   const submissionData = query.data
 
   if (query.isPending) {
-    return <div>Loading...</div>
+    return (
+      <div className="absolute inset-0 flex items-center justify-center gap-6 text-3xl">
+        <LoaderIcon className="size-7 animate-spin" />
+        Loading...
+      </div>
+    )
   }
 
   if (!submissionData) {
-    return <div>Loading...</div>
+    return (
+      <div className="absolute inset-0 flex items-center justify-center gap-6 text-3xl">
+        <LoaderIcon className="size-7 animate-spin" />
+        Loading...
+      </div>
+    )
   }
 
   if (submissionData === 'unauthorized') {
-    return <div>Unauthorized</div>
+    return (
+      <div className="absolute inset-0 flex items-center justify-center gap-6 text-3xl">
+        <LockIcon />
+        You're not allowed to do this, sorry
+      </div>
+    )
   }
 
   if (submissionData === 'room-closed') {
-    return <div>Room is Closed!</div>
+    return (
+      <div className="absolute inset-0 flex items-center justify-center gap-6 text-3xl">
+        Game Over! Thanks for playing <SmileIcon />
+      </div>
+    )
   }
 
   if (submissionData === 'out-of-prompts') {
-    return <div>Out of prompts?!</div>
+    return (
+      <div className="absolute inset-0 flex items-center justify-center gap-6 text-3xl">
+        ...we ran out of prompts lmao
+      </div>
+    )
   }
 
   return (
-    <div className="flex flex-col gap-6">
-      <div>
-        {submissionData.id} - {submissionData.from} - {submissionData.to} - {submissionData.target}
+    <div className="absolute inset-0 flex flex-col items-center justify-between">
+      <header className="z-10 flex h-24 w-full shrink-0 grow-0 items-center justify-between gap-6 bg-mauve-800/10 p-6 backdrop-blur-sm">
+        <Link to={'/'}>
+          <h1 className="font-fredoka text-4xl">Vibe Check!</h1>
+        </Link>
+      </header>
+      <div className="-mt-24 flex w-full max-w-4xl grow flex-col items-center justify-center gap-6 p-6 pt-30">
+        <div>Your target is...</div>
+        <PlayerVisualiser
+          from={submissionData.from}
+          to={submissionData.to}
+          target={submissionData.target}
+          roomOwner={submissionData.roomOwner}
+        />
+        {!submissionData.hint && (
+          <CreateSubmissionForm submissionId={submissionData.id} roomId={room.id} />
+        )}
+        {submissionData.hint && !submissionData.used && (
+          <div>
+            Thanks for your submission - {submissionData.hint}. Wait to see it played on stream!
+          </div>
+        )}
       </div>
-      {!submissionData.hint && (
-        <CreateSubmissionForm submissionId={submissionData.id} roomId={room.id} />
-      )}
-      {submissionData.hint && !submissionData.used && (
-        <>Thanks for your submission - {submissionData.hint}. Wait to see it played on stream!</>
-      )}
     </div>
   )
 }

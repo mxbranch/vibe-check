@@ -33,8 +33,9 @@ export const getMe = createServerFn({
 export const getUser = createServerFn({
   method: 'GET',
 })
-  .inputValidator(v.pipe(v.string(), v.trim()))
+  .inputValidator(v.nullable(v.pipe(v.string(), v.trim())))
   .handler(async ({ data }) => {
+    if (!data) return null
     const request = getRequest()
     const getSessionResponse = await auth.api.getUser({
       query: {
@@ -62,7 +63,7 @@ export const validateRoomCode = createServerFn({
   .inputValidator(v.pipe(v.string(), v.trim()))
   .handler(async ({ data }) => {
     const roomId = sqids.decode(data)
-    const roomCount = await db.$count(room, inArray(room.id, roomId))
+    const roomCount = await db.$count(room, and(inArray(room.id, roomId), isNull(room.gameEnded)))
     return roomCount > 0
   })
 
@@ -185,7 +186,7 @@ export const getValidSubmission = createServerFn({ method: 'GET' })
       }
       const index = Math.floor(Math.random() * prompts.length)
       const submissionPrompt = prompts[index]
-      const target = Math.random().toPrecision(2)
+      const target = Math.random()
       await db.insert(submission).values({
         room: roomId,
         owner: user.id,
@@ -199,9 +200,11 @@ export const getValidSubmission = createServerFn({ method: 'GET' })
         ...getTableColumns(submission),
         from: prompt.from,
         to: prompt.to,
+        roomOwner: room.owner,
       })
       .from(submission)
       .leftJoin(prompt, eq(submission.prompt, prompt.id))
+      .leftJoin(room, eq(submission.room, room.id))
       .where(submissionWhereClause)
       .orderBy(desc(submission.id))
       .limit(1)
@@ -213,11 +216,12 @@ export const getValidSubmission = createServerFn({ method: 'GET' })
       target: validSubmission.target,
       hint: validSubmission.hint,
       used: validSubmission.used,
+      roomOwner: validSubmission.roomOwner,
     }
   })
 
 export const postSubmissionSchema = v.object({
-  hint: v.pipe(v.string(), v.trim(), v.minLength(5), v.maxLength(140)),
+  hint: v.pipe(v.string(), v.trim(), v.minLength(1), v.maxLength(140)),
   submissionId: v.pipe(v.number(), v.integer()),
 })
 export type PostSubmissionSchema = v.InferInput<typeof postSubmissionSchema>
