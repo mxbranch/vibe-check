@@ -30,6 +30,31 @@ export const getMe = createServerFn({
   }
 })
 
+export const getUser = createServerFn({
+  method: 'GET',
+})
+  .inputValidator(v.pipe(v.string(), v.trim()))
+  .handler(async ({ data }) => {
+    const request = getRequest()
+    const getSessionResponse = await auth.api.getUser({
+      query: {
+        id: data,
+      },
+      headers: request.headers,
+    })
+    if (!getSessionResponse) {
+      return null
+    }
+
+    return {
+      id: getSessionResponse.id,
+      image: getSessionResponse.image,
+      username: getSessionResponse.name,
+      banned: getSessionResponse.banned,
+      role: getSessionResponse.role,
+    }
+  })
+
 // Room Logic
 export const validateRoomCode = createServerFn({
   method: 'GET',

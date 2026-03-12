@@ -4,6 +4,7 @@ import { Gamepad2Icon } from 'lucide-react'
 
 import { TwitchSigninButton } from '@/components/auth/twitch-signin-button'
 import { TwitchSignoutButton } from '@/components/auth/twitch-signout-button'
+import { UserBadge } from '@/components/auth/user-badge'
 import { CreateRoomButton } from '@/components/game/create-room'
 import { JoinRoomForm } from '@/components/game/join-room'
 import { Avatar } from '@/components/ui/avatar'
@@ -47,15 +48,7 @@ function Home() {
         {user && (
           <>
             <div className="flex w-full items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Avatar
-                  banned={user.banned ?? false}
-                  crown={user.role === 'admin'}
-                  imgSrc={user.image ?? undefined}
-                  name={user.username}
-                />
-                <span className="hidden md:inline">{user.username}</span>
-              </div>
+              <UserBadge userId={user.id} />
               <TwitchSignoutButton />
             </div>
             <Separator />
