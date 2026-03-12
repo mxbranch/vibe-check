@@ -2,8 +2,8 @@ import { Separator as SeparatorPrimitive, type SeparatorProps } from '@base-ui/r
 
 import { cn } from '@/lib/cn'
 
-export function Separator(props: SeparatorProps & { text?: string }) {
-  const { className, text, orientation: _, ...rest } = props
+export function Separator(props: Omit<SeparatorProps, 'orientation'> & { text?: string }) {
+  const { className, text, ...rest } = props
 
   if (text) {
     return (
@@ -16,4 +16,15 @@ export function Separator(props: SeparatorProps & { text?: string }) {
   }
 
   return <SeparatorPrimitive className={cn('h-px bg-purple-600', className)} {...rest} />
+}
+
+export function VerticalSeparator(props: Omit<SeparatorProps, 'orientation'>) {
+  const { className, ...rest } = props
+  return (
+    <SeparatorPrimitive
+      orientation="vertical"
+      className={cn('w-px bg-purple-600', className)}
+      {...rest}
+    />
+  )
 }
