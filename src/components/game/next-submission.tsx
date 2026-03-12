@@ -26,7 +26,7 @@ export function NextSubmissionButton(props: Props) {
 
   return (
     <Button type="button" onClick={handleClick}>
-      NEXT SUBMISSION
+      Next Submission
     </Button>
   )
 }
