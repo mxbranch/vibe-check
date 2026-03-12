@@ -2,9 +2,12 @@ import { useQuery } from '@tanstack/react-query'
 import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
 import { LoaderIcon, LockIcon } from 'lucide-react'
 
+import { UserBadge } from '@/components/auth/user-badge'
 import { BanSubmissionButton } from '@/components/game/ban-submission'
 import { CloseRoomButton } from '@/components/game/close-room'
 import { SkipSubmissionButton } from '@/components/game/skip-submission'
+import { DismissableBanner } from '@/components/ui/dismissable-banner'
+import { Separator } from '@/components/ui/separator'
 import { getMe, getRoom, getRoomNextSubmission } from '@/data'
 
 export const Route = createFileRoute('/host/$code_/preview')({
@@ -17,6 +20,13 @@ export const Route = createFileRoute('/host/$code_/preview')({
       user,
     }
   },
+  head: () => ({
+    meta: [
+      {
+        title: 'Preview | Vibe Check',
+      },
+    ],
+  }),
 })
 
 function RouteComponent() {
@@ -67,27 +77,36 @@ function RouteComponent() {
   }
 
   return (
-    <div className="absolute inset-0 flex flex-col items-start justify-between">
+    <div className="absolute inset-0 flex flex-col items-center justify-between">
       <header className="z-10 flex h-24 w-full shrink-0 grow-0 items-center justify-between gap-6 bg-mauve-800/10 p-6 backdrop-blur-sm">
         <Link to={'/'}>
           <h1 className="font-fredoka text-4xl">Vibe Check!</h1>
         </Link>
-        <CloseRoomButton roomId={room.id} />
       </header>
-      <div className="-mt-24 flex w-full grow flex-col items-center justify-center gap-6">
+      <div className="-mt-24 flex w-full max-w-4xl grow flex-col items-center justify-center gap-6">
+        <DismissableBanner>
+          This is the submission preview tab! Use it to moderate upcoming submissions before they
+          hit the stream.
+        </DismissableBanner>
         {submissionData ? (
-          <div>
-            {submissionData.owner} - {submissionData.from} - {submissionData.to} -{' '}
-            {submissionData.hint}
-          </div>
-        ) : (
-          <div>No Upcoming Submission! Hope it's good...</div>
-        )}
-        {submissionData && (
           <>
-            <SkipSubmissionButton roomId={room.id} submissionId={submissionData.id} />
-            <BanSubmissionButton roomId={room.id} submissionId={submissionData.id} />
+            The next submission will be from:
+            <UserBadge userId={submissionData.owner} className="shrink-0" />
+            <Separator text="who was given the prompt..." />
+            <div>
+              {submissionData.from} to {submissionData.to}
+            </div>
+            <Separator text="and they said..." />
+            {submissionData.hint}
+            <div className="flex w-full max-w-4xl items-center justify-center gap-6">
+              <SkipSubmissionButton roomId={room.id} submissionId={submissionData.id} />
+              <BanSubmissionButton roomId={room.id} submissionId={submissionData.id} />
+            </div>
           </>
+        ) : (
+          <div className="inline-flex rotate-2 items-center gap-3 text-4xl">
+            No upcoming submissions yet! Hope they're good...
+          </div>
         )}
       </div>
     </div>

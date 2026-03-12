@@ -95,7 +95,7 @@ function RouteComponent() {
         <RoomCode code={params.code} />
         <ButtonLink to={'/host/$code/preview'} params={params} target="_blank">
           <SearchIcon />
-          Open Preview
+          Open Submission Preview Tab
         </ButtonLink>
       </div>
     </div>
