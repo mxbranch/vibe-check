@@ -1,3 +1,4 @@
 node_modules
 .tanstack/tmp
 .env
+**/**/.DS_Store
