@@ -4,6 +4,7 @@ import { LoaderIcon, LockIcon, SmileIcon } from 'lucide-react'
 
 import { CreateSubmissionForm } from '@/components/game/create-submission'
 import { PlayerVisualiser } from '@/components/game/player-visualiser'
+import { ButtonLink } from '@/components/ui/button'
 import { getMe, getRoom, getValidSubmission } from '@/data'
 
 export const Route = createFileRoute('/play/$code')({
@@ -67,7 +68,7 @@ function RouteComponent() {
 
   if (submissionData === 'unauthorized') {
     return (
-      <div className="absolute inset-0 flex items-center justify-center gap-6 text-3xl">
+      <div className="absolute inset-0 flex items-center justify-center gap-3 text-3xl">
         <LockIcon />
         You're not allowed to do this, sorry
       </div>
@@ -76,8 +77,11 @@ function RouteComponent() {
 
   if (submissionData === 'room-closed') {
     return (
-      <div className="absolute inset-0 flex items-center justify-center gap-6 text-3xl">
-        Game Over! Thanks for playing <SmileIcon />
+      <div className="absolute inset-0 flex flex-col items-center justify-center gap-6">
+        <div className="flex gap-3 text-3xl">
+          Game Over! Thanks for playing <SmileIcon />
+        </div>
+        <ButtonLink to="/">Go Back To The Main Page</ButtonLink>
       </div>
     )
   }
