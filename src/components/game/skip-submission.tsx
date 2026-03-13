@@ -25,7 +25,7 @@ export function SkipSubmissionButton(props: Props) {
 
   return (
     <Button type="button" onClick={handleClick}>
-      SKIP SUBMISSION
+      Skip
     </Button>
   )
 }
