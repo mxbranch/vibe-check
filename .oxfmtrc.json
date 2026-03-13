@@ -6,7 +6,6 @@
   "sortImports": {},
   "sortTailwindcss": {
     "stylesheet": "./src/styles/global.css",
-    "functions": ["clsx", "cn"],
-    "preserveWhitespace": true
+    "functions": ["clsx", "cn"]
   }
 }
