@@ -26,6 +26,7 @@ export function PlayerVisualiser(props: Props) {
   })
 
   const owner = query.data
+  if (owner === 'unauthorized') return null
 
   return (
     <div className="flex w-full grow flex-col items-center justify-between">

@@ -10,7 +10,6 @@ import { NextSubmissionButton } from '@/components/game/next-submission'
 import { RoomCode } from '@/components/game/room-code'
 import { SkipSubmissionButton } from '@/components/game/skip-submission'
 import { Button, ButtonLink } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
 import { getMe, getRoom, getRoomCurrentSubmission } from '@/data'
 import { cn } from '@/lib/cn'
 

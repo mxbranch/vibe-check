@@ -4,7 +4,7 @@ import { and, asc, desc, eq, getTableColumns, inArray, isNotNull, isNull, not } 
 import * as v from 'valibot'
 
 import db from '@/db'
-import { room, submission, prompt } from '@/db/schema'
+import { room, submission, prompt, user as userTable } from '@/db/schema'
 import { auth } from '@/lib/auth'
 import { sqids } from '@/lib/sqids'
 
@@ -36,23 +36,24 @@ export const getUser = createServerFn({
   .inputValidator(v.nullable(v.pipe(v.string(), v.trim())))
   .handler(async ({ data }) => {
     if (!data) return null
-    const request = getRequest()
-    const getSessionResponse = await auth.api.getUser({
-      query: {
-        id: data,
-      },
-      headers: request.headers,
-    })
-    if (!getSessionResponse) {
+    // Auth
+    const user = await getMe()
+    const allowed = user && !user.banned
+    if (!allowed) return 'unauthorized'
+
+    const userResult = await db.select().from(userTable).where(eq(userTable.id, data))
+    const userData = userResult[0]
+
+    if (!userData) {
       return null
     }
 
     return {
-      id: getSessionResponse.id,
-      image: getSessionResponse.image,
-      username: getSessionResponse.name,
-      banned: getSessionResponse.banned,
-      role: getSessionResponse.role,
+      id: userData.id,
+      image: userData.image,
+      username: userData.name,
+      banned: userData.banned,
+      role: userData.role,
     }
   })
 

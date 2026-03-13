@@ -25,6 +25,7 @@ export function HostSlider(props: Props) {
   })
 
   const owner = query.data
+  if (owner === 'unauthorized') return null
 
   return (
     <Slider.Root

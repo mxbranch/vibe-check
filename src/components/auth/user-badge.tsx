@@ -20,6 +20,7 @@ export function UserBadge(props: Props) {
   })
 
   const user = query.data
+  if (user === 'unauthorized') return null
 
   return (
     <div className="flex items-center justify-start gap-3">
