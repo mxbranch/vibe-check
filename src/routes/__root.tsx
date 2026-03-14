@@ -1,6 +1,7 @@
 import { Outlet, createRootRoute, HeadContent, Scripts } from '@tanstack/react-router'
 import React from 'react'
 
+import favicon from '@/assets/jackdaw_pog.png?url'
 import { Footer } from '@/components/layout/footer'
 import { Konami } from '@/components/layout/konami'
 import { getMe } from '@/data'
@@ -22,7 +23,10 @@ export const Route = createRootRoute({
         title: 'Vibe Check',
       },
     ],
-    links: [{ rel: 'stylesheet', href: globalCSS }],
+    links: [
+      { rel: 'stylesheet', href: globalCSS },
+      { rel: 'icon', href: favicon, type: 'image/png' },
+    ],
   }),
   component: RootComponent,
   loader: async () => {
