@@ -22,7 +22,7 @@ export const Route = createFileRoute('/host/$code_/preview')({
   head: () => ({
     meta: [
       {
-        title: 'Preview | Vibe Check',
+        title: 'Vibe Check! Preview Screen',
       },
     ],
   }),

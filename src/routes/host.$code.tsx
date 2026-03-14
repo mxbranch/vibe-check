@@ -23,6 +23,9 @@ export const Route = createFileRoute('/host/$code')({
       user,
     }
   },
+  head: () => ({
+    meta: [{ title: 'Vibe Check! Hosting A Game' }],
+  }),
 })
 
 function RouteComponent() {
