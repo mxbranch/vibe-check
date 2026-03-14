@@ -110,32 +110,32 @@ function RouteComponent() {
               >
                 <div
                   className={cn(
-                    'absolute top-auto bottom-auto left-[calc(-46*var(--spacing)+var(--target))] size-92 rounded-full bg-transparent transition-colors duration-1000',
-                    revealed && 'bg-purple-800/40',
+                    'absolute top-auto bottom-auto left-[calc(-46*var(--spacing)+var(--target))] size-92 rounded-full bg-transparent opacity-0 transition-colors duration-1000',
+                    revealed && 'bg-purple-800/40 opacity-100',
                   )}
                 />
                 <div
                   className={cn(
-                    'absolute top-auto bottom-auto left-[calc(-36*var(--spacing)+var(--target))] size-72 rounded-full bg-transparent transition-colors duration-1000',
-                    revealed && 'bg-purple-700/60',
+                    'absolute top-auto bottom-auto left-[calc(-36*var(--spacing)+var(--target))] size-72 rounded-full bg-transparent opacity-0 transition-colors duration-1000',
+                    revealed && 'bg-purple-700/60 opacity-100',
                   )}
                 />
                 <div
                   className={cn(
-                    'absolute top-auto bottom-auto left-[calc(-26*var(--spacing)+var(--target))] size-52 rounded-full bg-transparent transition-colors duration-1000',
-                    revealed && 'bg-purple-600/80',
+                    'absolute top-auto bottom-auto left-[calc(-26*var(--spacing)+var(--target))] size-52 rounded-full bg-transparent opacity-0 transition-colors duration-1000',
+                    revealed && 'bg-purple-600/80 opacity-100',
                   )}
                 />
                 <div
                   className={cn(
-                    'absolute top-auto bottom-auto left-[calc(-16*var(--spacing)+var(--target))] size-32 rounded-full bg-transparent transition-colors duration-1000',
-                    revealed && 'bg-purple-500',
+                    'absolute top-auto bottom-auto left-[calc(-16*var(--spacing)+var(--target))] size-32 rounded-full bg-transparent opacity-0 transition-colors duration-1000',
+                    revealed && 'bg-purple-500 opacity-100',
                   )}
                 />
                 <div
                   className={cn(
-                    'absolute top-auto bottom-auto left-[calc(-6*var(--spacing)+var(--target))] size-12 rounded-full bg-transparent transition-colors duration-1000',
-                    revealed && 'bg-purple-400',
+                    'absolute top-auto bottom-auto left-[calc(-6*var(--spacing)+var(--target))] size-12 rounded-full bg-transparent opacity-0 transition-colors duration-1000',
+                    revealed && 'bg-purple-400 opacity-100',
                   )}
                 />
                 <HostSlider value={value} setValue={setValue} roomOwner={room.owner} />
