@@ -17,6 +17,9 @@ importers:
       '@fontsource/fredoka-one':
         specifier: ^5.2.5
         version: 5.2.5
+      '@mrmartineau/use-sound':
+        specifier: ^5.1.0
+        version: 5.1.0(react@19.2.4)
       '@tailwindcss/vite':
         specifier: ^4.2.1
         version: 4.2.1(vite@7.3.1(@types/node@25.3.5)(jiti@2.6.1)(lightningcss@1.31.1)(tsx@4.21.0)(yaml@2.8.2))
@@ -68,9 +71,6 @@ importers:
       tailwindcss:
         specifier: ^4.2.1
         version: 4.2.1
-      use-sound:
-        specifier: ^5.0.0
-        version: 5.0.0(react@19.2.4)
       valibot:
         specifier: ^1.2.0
         version: 1.2.0(typescript@5.9.3)
@@ -1031,6 +1031,11 @@ packages:
   '@mrleebo/prisma-ast@0.13.1':
     resolution: {integrity: sha512-XyroGQXcHrZdvmrGJvsA9KNeOOgGMg1Vg9OlheUsBOSKznLMDl+YChxbkboRHvtFYJEMRYmlV3uoo/njCw05iw==}
     engines: {node: '>=16'}
+
+  '@mrmartineau/use-sound@5.1.0':
+    resolution: {integrity: sha512-XtMz5d48GiKNRaHG2NaAYdq2DebZpOYfTQ8itpvu7jMXY1/DHTjWzVKkALbVxZHwlN4+mp5XScEy3d0HFS/OPA==}
+    peerDependencies:
+      react: '>=16.8'
 
   '@netlify/ai@0.4.1':
     resolution: {integrity: sha512-ETLtV/9taYrcGhszwO+BLFgFJJ2MCnJp8BwxfwV6Z/+z3SsaUG4ExC8x4xzNCdB2GPWxXrXkvR2LFNsPFSLcRA==}
@@ -4856,11 +4861,6 @@ packages:
   urlpattern-polyfill@8.0.2:
     resolution: {integrity: sha512-Qp95D4TPJl1kC9SKigDcqgyM2VDVO4RiJc2d4qe5GrYm+zbIQCWWKAFaJNQ4BhdFeDGwBmAxqJBwWSJDb9T3BQ==}
 
-  use-sound@5.0.0:
-    resolution: {integrity: sha512-MNHT3FFC5HxNCrgZtrnpIMJI2cw/0D2xismcrtyht8BTuF5FhFhb57xO/jlQr2xJaFrc/0btzRQvGyHQwB7PVA==}
-    peerDependencies:
-      react: '>=16.8'
-
   use-sync-external-store@1.6.0:
     resolution: {integrity: sha512-Pp6GSwGP/NrPIrxVFAIkOQeyw8lFenOHijQWkUTrDvrF4ALqylP2C/KCkeS9dpUM3KvYRQhna5vt7IL95+ZQ9w==}
     peerDependencies:
@@ -5749,6 +5749,11 @@ snapshots:
     dependencies:
       chevrotain: 10.5.0
       lilconfig: 2.1.0
+
+  '@mrmartineau/use-sound@5.1.0(react@19.2.4)':
+    dependencies:
+      howler: 2.2.4
+      react: 19.2.4
 
   '@netlify/ai@0.4.1':
     dependencies:
@@ -9779,11 +9784,6 @@ snapshots:
   urlpattern-polyfill@10.1.0: {}
 
   urlpattern-polyfill@8.0.2: {}
-
-  use-sound@5.0.0(react@19.2.4):
-    dependencies:
-      howler: 2.2.4
-      react: 19.2.4
 
   use-sync-external-store@1.6.0(react@19.2.4):
     dependencies:

@@ -1,5 +1,5 @@
+import useSound from '@mrmartineau/use-sound'
 import { useHotkeySequence } from '@tanstack/react-hotkeys'
-import useSound from 'use-sound'
 
 import konamiSound from '@/assets/konamiSound.mp3'
 
