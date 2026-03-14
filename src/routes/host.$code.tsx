@@ -64,6 +64,7 @@ function RouteComponent() {
 
   React.useEffect(() => {
     setValue(0.5)
+    reveal(false)
   }, [submissionData])
 
   if (query.isPending) {
