@@ -3,6 +3,7 @@ import React from 'react'
 
 import { Footer } from '@/components/layout/footer'
 import { Konami } from '@/components/layout/konami'
+import { getMe } from '@/data'
 import { TanStackQueryProvider } from '@/providers/tanstack-query'
 
 import globalCSS from '@/styles/global.css?url'
@@ -24,6 +25,10 @@ export const Route = createRootRoute({
     links: [{ rel: 'stylesheet', href: globalCSS }],
   }),
   component: RootComponent,
+  loader: async () => {
+    const user = await getMe()
+    return { user }
+  },
 })
 
 function RootComponent() {
@@ -41,6 +46,7 @@ type RootDocumentProps = Readonly<{
 }>
 
 function RootDocument(props: RootDocumentProps) {
+  const { user } = Route.useLoaderData()
   return (
     <html>
       <head>
@@ -57,7 +63,7 @@ function RootDocument(props: RootDocumentProps) {
           />
           {props.children}
         </div>
-        <Footer />
+        <Footer isLoggedIn={!!user} />
         <Konami />
         <Scripts />
       </body>

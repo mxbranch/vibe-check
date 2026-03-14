@@ -4,7 +4,7 @@ import { and, asc, desc, eq, getTableColumns, inArray, isNotNull, isNull, not } 
 import * as v from 'valibot'
 
 import db from '@/db'
-import { room, submission, prompt, user as userTable } from '@/db/schema'
+import { room, submission, prompt, user as userTable, session, account } from '@/db/schema'
 import { auth } from '@/lib/auth'
 import { sqids } from '@/lib/sqids'
 
@@ -56,6 +56,32 @@ export const getUser = createServerFn({
       role: userData.role,
     }
   })
+
+export const deleteMe = createServerFn({
+  method: 'POST',
+}).handler(async () => {
+  const user = await getMe()
+  if (!user) return 'no user session found'
+
+  await db.transaction(async (tx) => {
+    // Delete submissions first
+    await tx.delete(submission).where(eq(submission.owner, user.id))
+
+    // Get rooms owned by the user
+    const rooms = await tx.select({ id: room.id }).from(room).where(eq(room.owner, user.id))
+    // If there are any rooms, remove any related submissions and then remove the rooms
+    if (rooms.length > 0) {
+      const roomIds = rooms.map((room) => room.id)
+      await tx.delete(submission).where(inArray(submission.room, roomIds))
+      await tx.delete(room).where(inArray(room.id, roomIds))
+    }
+
+    // Delete the user
+    await tx.delete(session).where(eq(session.userId, user.id))
+    await tx.delete(account).where(eq(account.userId, user.id))
+    await tx.delete(userTable).where(eq(userTable.id, user.id))
+  })
+})
 
 // Room Logic
 export const validateRoomCode = createServerFn({
