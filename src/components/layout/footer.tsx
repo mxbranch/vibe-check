@@ -1,3 +1,5 @@
+import { useRouterState } from '@tanstack/react-router'
+
 import { InlineLink } from '../ui/inline-link'
 import { DeleteMe } from './delete-me'
 
@@ -7,6 +9,8 @@ type Props = Readonly<{
 
 export function Footer(props: Props) {
   const { isLoggedIn } = props
+  const router = useRouterState()
+  if (router.location.pathname !== '/') return null
   return (
     <div
       className="relative h-106 md:h-96"
