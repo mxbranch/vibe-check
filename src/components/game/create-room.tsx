@@ -13,6 +13,7 @@ export function CreateRoomButton() {
   return (
     <Button
       type="button"
+      disabled={processing}
       onClick={async () => {
         setProcessing(true)
         const newRoom = await createRoom()
