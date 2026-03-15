@@ -261,10 +261,12 @@ export const postSubmission = createServerFn({ method: 'POST' })
     if (!user || user.banned) return 'unauthorized'
 
     // Update submission if the user is allowed to
+    const now = new Date()
     await db
       .update(submission)
       .set({
         hint: data.hint,
+        timestamp: now,
       })
       .where(and(eq(submission.id, data.submissionId), eq(submission.owner, user.id)))
   })
@@ -297,10 +299,11 @@ export const getRoomCurrentSubmission = createServerFn({ method: 'GET' })
           eq(room.owner, user.id),
           isNull(submission.used),
           isNotNull(submission.hint),
+          isNotNull(submission.timestamp),
         ),
       )
       .limit(1)
-      .orderBy(asc(submission.id))
+      .orderBy(asc(submission.timestamp))
 
     const activeSubmission = submissionResult[0]
 
@@ -330,7 +333,7 @@ export const getRoomNextSubmission = createServerFn({ method: 'GET' })
     const allowed = user?.role === 'admin' && !user.banned
     if (!allowed) return 'unauthorized'
 
-    // Get first unused submission for this room
+    // Get second unused submission for this room
     const submissionResult = await db
       .select({
         ...getTableColumns(submission),
@@ -346,11 +349,12 @@ export const getRoomNextSubmission = createServerFn({ method: 'GET' })
           eq(room.owner, user.id),
           isNull(submission.used),
           isNotNull(submission.hint),
+          isNotNull(submission.timestamp),
         ),
       )
-      .offset(1)
+      .offset(1) // Second!
       .limit(1)
-      .orderBy(asc(submission.id))
+      .orderBy(asc(submission.timestamp))
 
     const activeSubmission = submissionResult[0]
 

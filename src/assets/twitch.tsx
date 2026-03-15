@@ -16,7 +16,7 @@ export function TwitchIcon(props: Props) {
       y="0px"
       viewBox="0 0 2400 2800"
       style={
-        { 'enable-background': 'new 0 0 2400 2800', 'xml:space': 'preserve' } as React.CSSProperties
+        { enableBackground: 'new 0 0 2400 2800', 'xml:space': 'preserve' } as React.CSSProperties
       }
       className={className}
     >

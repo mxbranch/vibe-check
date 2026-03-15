@@ -24,7 +24,7 @@ export const submission = pgTable('submission', {
     .notNull(),
   target: numeric({ scale: 2, precision: 3, mode: 'number' }).notNull(),
   hint: text(),
-  timestamp: timestamp({ withTimezone: true, mode: 'date' }).defaultNow().notNull(),
+  timestamp: timestamp({ withTimezone: true, mode: 'date' }),
   used: json().$type<{
     timestamp: string
     result: 'played' | 'skipped' | 'banned'
