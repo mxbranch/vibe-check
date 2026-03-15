@@ -63,7 +63,7 @@ function Home() {
             >
               {currentRoomValid && (
                 <ButtonLink nativeButton={false} to={'/host/$code'} params={{ code: currentRoom }}>
-                  <Gamepad2Icon />
+                  <Gamepad2Icon className="size-4" />
                   Current Room
                 </ButtonLink>
               )}

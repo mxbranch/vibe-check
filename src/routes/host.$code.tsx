@@ -173,7 +173,7 @@ function RouteComponent() {
       <div className="z-10 flex h-24 w-full shrink-0 grow-0 items-center justify-between gap-6 bg-mauve-800/10 p-6 backdrop-blur-sm">
         <RoomCode code={params.code} />
         <ButtonLink to={'/host/$code/preview'} params={params} target="_blank">
-          <SearchIcon />
+          <SearchIcon className="size-4" />
           Open Submission Preview Tab
         </ButtonLink>
       </div>
