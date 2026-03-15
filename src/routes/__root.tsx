@@ -59,7 +59,7 @@ function RootDocument(props: RootDocumentProps) {
       <body className="bg-purple-950 text-lg font-medium text-purple-100">
         <div className="relative isolate flex h-svh w-full items-center justify-center overflow-clip">
           <div
-            className="z-0 aspect-square h-[max(100svh,100svw)] animate-spin-slow mask-radial-from-0 mask-radial-to-60% mask-radial-at-center opacity-10"
+            className="z-0 aspect-square h-[max(100svh,100svw)] animate-spin-slow mask-radial-from-0 mask-radial-to-60% mask-radial-at-center opacity-5"
             style={{
               background:
                 'repeating-conic-gradient(from 0deg at center, var(--color-mauve-50) 0 10deg, transparent 0 20deg)',
