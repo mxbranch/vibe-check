@@ -102,7 +102,7 @@ function RouteComponent() {
         </Link>
       </header>
       <div className="-mt-24 flex w-full max-w-4xl grow flex-col items-center justify-center gap-6 p-6 pt-30">
-        <div>Your target is...</div>
+        <div className="text-center">Get the host to guess this position...</div>
         <PlayerVisualiser
           from={submissionData.from}
           to={submissionData.to}

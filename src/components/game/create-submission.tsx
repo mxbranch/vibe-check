@@ -62,7 +62,7 @@ export function CreateSubmissionForm(props: Props) {
           <div>
             {hintState.length} / {MAX_SUBMISSION_LENGTH}
           </div>
-          <Button type="submit">Submit Entry</Button>
+          <Button type="submit">Submit Your Hint</Button>
         </div>
       </form>
     </>
