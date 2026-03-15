@@ -10,10 +10,11 @@ type Props = Readonly<{
   value: number
   setValue: React.Dispatch<React.SetStateAction<number>>
   roomOwner: string
+  disabled?: boolean
 }>
 
 export function HostSlider(props: Props) {
-  const { value, setValue, roomOwner } = props
+  const { value, setValue, roomOwner, disabled } = props
 
   const query = useQuery({
     queryKey: ['user-info', roomOwner],
@@ -35,6 +36,7 @@ export function HostSlider(props: Props) {
       max={1}
       step={0.01}
       className="w-full"
+      disabled={disabled}
     >
       <Slider.Control className="flex w-full grow touch-none items-center py-3 select-none">
         <Slider.Track className="h-1 w-full rounded-sm bg-gray-200 shadow-[inset_0_0_0_1px] shadow-gray-200 select-none">

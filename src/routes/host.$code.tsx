@@ -139,7 +139,12 @@ function RouteComponent() {
                     revealed && 'bg-purple-400 opacity-100',
                   )}
                 />
-                <HostSlider value={value} setValue={setValue} roomOwner={room.owner} />
+                <HostSlider
+                  value={value}
+                  setValue={setValue}
+                  roomOwner={room.owner}
+                  disabled={revealed}
+                />
               </div>
               <div className="flex w-full items-center justify-end gap-2 text-xl">
                 {submissionData.to} <ArrowRight />
