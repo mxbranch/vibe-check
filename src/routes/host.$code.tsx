@@ -1,6 +1,6 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
-import { ArrowLeft, ArrowRight, FrownIcon, LockIcon, SearchIcon } from 'lucide-react'
+import { ArrowLeft, ArrowRight, EyeIcon, FrownIcon, LockIcon, SearchIcon } from 'lucide-react'
 import React from 'react'
 
 import { UserBadge } from '@/components/auth/user-badge'
@@ -151,15 +151,18 @@ function RouteComponent() {
             </div>
             <div className="flex w-full items-center justify-between">
               <UserBadge userId={submissionData.owner} />
-              <Button onClick={() => reveal((revealed) => !revealed)}>
-                {revealed ? 'Hide' : 'Reveal'} Target
-              </Button>
               <div className="flex gap-3">
-                <NextSubmissionButton
-                  roomId={room.id}
-                  submissionId={submissionData.id}
-                  guess={value}
-                />
+                {!revealed ? (
+                  <Button onClick={() => reveal((revealed) => !revealed)}>
+                    <EyeIcon className="size-4" /> Reveal Target
+                  </Button>
+                ) : (
+                  <NextSubmissionButton
+                    roomId={room.id}
+                    submissionId={submissionData.id}
+                    guess={value}
+                  />
+                )}
                 <SkipSubmissionButton roomId={room.id} submissionId={submissionData.id} />
               </div>
             </div>

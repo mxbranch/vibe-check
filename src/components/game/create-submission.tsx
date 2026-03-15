@@ -69,7 +69,7 @@ export function CreateSubmissionForm(props: Props) {
             {hintState.length} / {MAX_SUBMISSION_LENGTH}
           </div>
           <Button type="submit" disabled={processing}>
-            {processing ? <Spinner /> : <SendIcon />} Submit Your Hint
+            {processing ? <Spinner /> : <SendIcon className="size-4" />} Submit Your Hint
           </Button>
         </div>
       </form>
