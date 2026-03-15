@@ -6,6 +6,7 @@ import React from 'react'
 import { deleteMe } from '@/data'
 
 import { Button } from '../ui/button'
+import { Spinner } from '../ui/spinner'
 
 type Props = Readonly<{
   isLoggedIn?: boolean
@@ -16,6 +17,7 @@ export function DeleteMe(props: Props) {
   const router = useRouter()
 
   const [deleted, setDeleted] = React.useState<boolean>(false)
+  const [processing, setProcessing] = React.useState<boolean>(false)
 
   return (
     <Dialog.Root>
@@ -47,14 +49,17 @@ export function DeleteMe(props: Props) {
               {isLoggedIn && (
                 <Button
                   onClick={async () => {
+                    setProcessing(true)
                     await deleteMe()
                     setDeleted(true)
+                    setProcessing(false)
                     router.navigate({
                       to: '/',
                     })
                   }}
+                  disabled={processing}
                 >
-                  <UserX2Icon /> Delete My Data
+                  {processing ? <Spinner /> : <UserX2Icon className="size-4" />} Delete My Data
                 </Button>
               )}
             </div>

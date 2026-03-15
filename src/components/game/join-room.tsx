@@ -1,20 +1,25 @@
 import { useRouter } from '@tanstack/react-router'
+import { Gamepad2Icon } from 'lucide-react'
 import React from 'react'
 
 import { validateRoomCode } from '@/data'
 
 import { Button } from '../ui/button'
+import { Spinner } from '../ui/spinner'
 
 export function JoinRoomForm() {
   const [code, setCode] = React.useState<string>('')
   const [feedback, setFeedback] = React.useState<string>('Enter Code To Play!')
+  const [processing, setProcessing] = React.useState<boolean>(false)
   const router = useRouter()
 
   async function clickHandler() {
+    setProcessing(true)
     setFeedback('Checking...')
     const roomExists = await validateRoomCode({ data: code })
     if (!roomExists) {
       setFeedback('Room Code Not Recognised')
+      setProcessing(false)
       return
     }
 
@@ -55,11 +60,12 @@ export function JoinRoomForm() {
           id="code-input"
         />
         <Button
-          disabled={code.length < 4}
+          disabled={code.length < 4 || processing}
           type="button"
           onClick={clickHandler}
           className="shrink-0 grow-0"
         >
+          {processing ? <Spinner /> : <Gamepad2Icon className="size-4" />}
           Join Game
         </Button>
       </div>

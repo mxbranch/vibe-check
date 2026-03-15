@@ -1,10 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
-import { LoaderIcon, LockIcon, SmileIcon } from 'lucide-react'
+import { LockIcon, SmileIcon } from 'lucide-react'
 
 import { CreateSubmissionForm } from '@/components/game/create-submission'
 import { PlayerVisualiser } from '@/components/game/player-visualiser'
 import { ButtonLink } from '@/components/ui/button'
+import { Spinner } from '@/components/ui/spinner'
 import { getMe, getRoom, getValidSubmission } from '@/data'
 
 export const Route = createFileRoute('/play/$code')({
@@ -51,7 +52,7 @@ function RouteComponent() {
   if (query.isPending) {
     return (
       <div className="absolute inset-0 flex items-center justify-center gap-6 text-3xl">
-        <LoaderIcon className="size-7 animate-spin" />
+        <Spinner className="size-7" />
         Loading...
       </div>
     )
@@ -60,7 +61,7 @@ function RouteComponent() {
   if (!submissionData) {
     return (
       <div className="absolute inset-0 flex items-center justify-center gap-6 text-3xl">
-        <LoaderIcon className="size-7 animate-spin" />
+        <Spinner className="size-7" />
         Loading...
       </div>
     )
@@ -78,7 +79,7 @@ function RouteComponent() {
   if (submissionData === 'room-closed') {
     return (
       <div className="absolute inset-0 flex flex-col items-center justify-center gap-6">
-        <div className="flex gap-3 text-3xl">
+        <div className="flex items-center gap-3 text-3xl">
           Game Over! Thanks for playing <SmileIcon />
         </div>
         <ButtonLink to="/">Go Back To The Main Page</ButtonLink>
@@ -88,8 +89,11 @@ function RouteComponent() {
 
   if (submissionData === 'out-of-prompts') {
     return (
-      <div className="absolute inset-0 flex items-center justify-center gap-6 text-3xl">
-        ...we ran out of prompts lmao
+      <div className="absolute inset-0 flex flex-col items-center justify-center gap-6">
+        <div className="flex items-center gap-3 text-3xl">
+          This game has used all of the available prompts?!
+        </div>
+        <ButtonLink to="/">Go Back To The Main Page</ButtonLink>
       </div>
     )
   }
@@ -113,9 +117,7 @@ function RouteComponent() {
           <CreateSubmissionForm submissionId={submissionData.id} roomId={room.id} />
         )}
         {submissionData.hint && !submissionData.used && (
-          <div>
-            Thanks for your submission - {submissionData.hint}. Wait to see it played on stream!
-          </div>
+          <div>Thanks for your hint - {submissionData.hint}. Wait to see it played on stream!</div>
         )}
       </div>
     </div>

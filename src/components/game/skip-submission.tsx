@@ -1,8 +1,11 @@
 import { useQueryClient } from '@tanstack/react-query'
+import { ArrowRightIcon } from 'lucide-react'
+import React from 'react'
 
 import { markSubmissionUsed } from '@/data'
 
 import { Button } from '../ui/button'
+import { Spinner } from '../ui/spinner'
 
 type Props = Readonly<{
   roomId: number
@@ -12,8 +15,9 @@ type Props = Readonly<{
 export function SkipSubmissionButton(props: Props) {
   const { roomId, submissionId } = props
   const queryClient = useQueryClient()
-
+  const [processing, setProcessing] = React.useState<boolean>(false)
   async function handleClick() {
+    setProcessing(true)
     await markSubmissionUsed({ data: { roomId, submissionId, guess: 0.0, result: 'skipped' } })
     await queryClient.refetchQueries({
       queryKey: ['game-submission', roomId],
@@ -21,11 +25,12 @@ export function SkipSubmissionButton(props: Props) {
     await queryClient.refetchQueries({
       queryKey: ['game-preview', roomId],
     })
+    setProcessing(false)
   }
 
   return (
-    <Button type="button" onClick={handleClick}>
-      Skip
+    <Button type="button" onClick={handleClick} disabled={processing}>
+      {processing ? <Spinner /> : <ArrowRightIcon className="size-4" />}Skip
     </Button>
   )
 }

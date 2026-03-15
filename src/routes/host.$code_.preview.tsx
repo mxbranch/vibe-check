@@ -1,12 +1,13 @@
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
-import { LoaderIcon, LockIcon } from 'lucide-react'
+import { LockIcon } from 'lucide-react'
 
 import { UserBadge } from '@/components/auth/user-badge'
 import { BanSubmissionButton } from '@/components/game/ban-submission'
 import { SkipSubmissionButton } from '@/components/game/skip-submission'
 import { DismissableBanner } from '@/components/ui/dismissable-banner'
 import { Separator } from '@/components/ui/separator'
+import { Spinner } from '@/components/ui/spinner'
 import { getMe, getRoom, getRoomNextSubmission } from '@/data'
 
 export const Route = createFileRoute('/host/$code_/preview')({
@@ -60,7 +61,7 @@ function RouteComponent() {
   if (query.isPending) {
     return (
       <div className="absolute inset-0 flex items-center justify-center gap-6 text-3xl">
-        <LoaderIcon className="size-7 animate-spin" />
+        <Spinner className="size-7" />
         Loading your room...
       </div>
     )

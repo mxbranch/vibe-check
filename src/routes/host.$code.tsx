@@ -1,6 +1,6 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { createFileRoute, Link, useRouter } from '@tanstack/react-router'
-import { ArrowLeft, ArrowRight, FrownIcon, LoaderIcon, LockIcon, SearchIcon } from 'lucide-react'
+import { ArrowLeft, ArrowRight, FrownIcon, LockIcon, SearchIcon } from 'lucide-react'
 import React from 'react'
 
 import { UserBadge } from '@/components/auth/user-badge'
@@ -10,6 +10,7 @@ import { NextSubmissionButton } from '@/components/game/next-submission'
 import { RoomCode } from '@/components/game/room-code'
 import { SkipSubmissionButton } from '@/components/game/skip-submission'
 import { Button, ButtonLink } from '@/components/ui/button'
+import { Spinner } from '@/components/ui/spinner'
 import { getMe, getRoom, getRoomCurrentSubmission } from '@/data'
 import { cn } from '@/lib/cn'
 
@@ -70,7 +71,7 @@ function RouteComponent() {
   if (query.isPending) {
     return (
       <div className="absolute inset-0 flex items-center justify-center gap-6 text-3xl">
-        <LoaderIcon className="size-7 animate-spin" />
+        <Spinner className="size-7" />
         Loading your room...
       </div>
     )

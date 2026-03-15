@@ -1,9 +1,12 @@
 import { useForm, useStore } from '@tanstack/react-form'
 import { useQueryClient } from '@tanstack/react-query'
+import { SendIcon } from 'lucide-react'
+import React from 'react'
 
 import { postSubmission, postSubmissionSchema, type PostSubmissionSchema } from '@/data'
 
 import { Button } from '../ui/button'
+import { Spinner } from '../ui/spinner'
 
 type Props = Readonly<{
   submissionId: number
@@ -15,6 +18,7 @@ const MAX_SUBMISSION_LENGTH = 140
 export function CreateSubmissionForm(props: Props) {
   const { submissionId, roomId } = props
 
+  const [processing, setProcessing] = React.useState<boolean>(false)
   const queryClient = useQueryClient()
   const form = useForm({
     defaultValues: {
@@ -22,10 +26,12 @@ export function CreateSubmissionForm(props: Props) {
       submissionId,
     } as PostSubmissionSchema,
     onSubmit: async ({ value }) => {
+      setProcessing(true)
       await postSubmission({ data: value })
       await queryClient.refetchQueries({
         queryKey: ['play-submission', roomId],
       })
+      setProcessing(false)
     },
     validators: {
       onSubmit: postSubmissionSchema,
@@ -62,7 +68,9 @@ export function CreateSubmissionForm(props: Props) {
           <div>
             {hintState.length} / {MAX_SUBMISSION_LENGTH}
           </div>
-          <Button type="submit">Submit Your Hint</Button>
+          <Button type="submit" disabled={processing}>
+            {processing ? <Spinner /> : <SendIcon />} Submit Your Hint
+          </Button>
         </div>
       </form>
     </>
