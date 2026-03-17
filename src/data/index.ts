@@ -126,13 +126,17 @@ export const createRoom = createServerFn({
   }
 
   // Create new room
-  const newRoom = await db
+  const newRoomResult = await db
     .insert(room)
     .values({
       owner: user.id,
     })
     .returning({ id: room.id })
-  const newRoomCode = sqids.encode([newRoom[0].id])
+  const newRoom = newRoomResult[0]
+  if (!newRoom) {
+    return 'database-error'
+  }
+  const newRoomCode = sqids.encode([newRoom.id])
   return {
     code: newRoomCode,
   }
@@ -160,16 +164,17 @@ export const getUserCurrentRoom = createServerFn({
   const user = await getMe()
   if (!user || user.banned) return 'unauthorized'
 
-  const rooms = await db
+  const roomResult = await db
     .select()
     .from(room)
     .where(and(isNull(room.gameEnded), eq(room.owner, user.id)))
     .orderBy(desc(room.id))
     .limit(1)
-  if (rooms.length === 0) {
+  const currentRoom = roomResult[0]
+  if (!currentRoom) {
     return null
   }
-  return sqids.encode([rooms[0].id])
+  return sqids.encode([currentRoom.id])
 })
 
 export const getValidSubmission = createServerFn({ method: 'GET' })
@@ -213,6 +218,9 @@ export const getValidSubmission = createServerFn({ method: 'GET' })
       }
       const index = Math.floor(Math.random() * prompts.length)
       const submissionPrompt = prompts[index]
+      if (!submissionPrompt) {
+        return 'out-of-prompts'
+      }
       const target = Math.random()
       await db.insert(submission).values({
         room: roomId,
@@ -236,6 +244,9 @@ export const getValidSubmission = createServerFn({ method: 'GET' })
       .orderBy(desc(submission.id))
       .limit(1)
     const validSubmission = validSubmissions[0]
+    if (!validSubmission) {
+      return null
+    }
     return {
       id: validSubmission.id,
       from: validSubmission.from,
@@ -391,7 +402,7 @@ export const markSubmissionUsed = createServerFn({ method: 'POST' })
     if (!allowed) return 'unauthorized'
 
     const now = new Date()
-    const updatedSubmission = await db
+    const updatedSubmissions = await db
       .update(submission)
       .set({
         used: {
@@ -403,7 +414,9 @@ export const markSubmissionUsed = createServerFn({ method: 'POST' })
       .where(and(eq(submission.room, data.roomId), eq(submission.id, data.submissionId)))
       .returning({ owner: submission.owner })
     if (data.result === 'banned') {
-      const { owner } = updatedSubmission[0]
+      const updatedSubmission = updatedSubmissions[0]
+      if (!updatedSubmission) return
+      const { owner } = updatedSubmission
       const request = getRequest()
       await auth.api.banUser({
         body: {

@@ -21,6 +21,10 @@ export function CreateRoomButton() {
           alert('Not Allowed')
           return
         }
+        if (newRoom === 'database-error') {
+          alert('Database Error')
+          return
+        }
         router.navigate({
           to: '/host/$code',
           params: {
