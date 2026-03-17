@@ -57,7 +57,10 @@ function RouteComponent() {
       }),
     placeholderData: keepPreviousData,
     refetchOnMount: false,
-    refetchInterval: 1000 * 10,
+    refetchInterval: (query) => {
+      const data = query.state.data
+      return data ? false : 15 * 1000
+    },
     retry: false,
   })
 
