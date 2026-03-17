@@ -19,7 +19,7 @@ export function NextSubmissionButton(props: Props) {
   const [processing, setProcessing] = React.useState<boolean>(false)
 
   async function handleClick() {
-    setProcessing(false)
+    setProcessing(true)
     await markSubmissionUsed({ data: { roomId, submissionId, guess } })
     await queryClient.refetchQueries({
       queryKey: ['game-submission', roomId],
@@ -27,7 +27,7 @@ export function NextSubmissionButton(props: Props) {
     await queryClient.refetchQueries({
       queryKey: ['game-preview', roomId],
     })
-    setProcessing(true)
+    setProcessing(false)
   }
 
   return (
