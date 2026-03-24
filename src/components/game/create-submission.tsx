@@ -7,16 +7,18 @@ import { postSubmission, postSubmissionSchema, type PostSubmissionSchema } from 
 
 import { Button } from '../ui/button'
 import { Spinner } from '../ui/spinner'
+import { RerollPromptButton } from './reroll-prompt'
 
 type Props = Readonly<{
   submissionId: number
   roomId: number
+  rerollUsed?: boolean
 }>
 
 const MAX_SUBMISSION_LENGTH = 140
 
 export function CreateSubmissionForm(props: Props) {
-  const { submissionId, roomId } = props
+  const { submissionId, roomId, rerollUsed = false } = props
 
   const [processing, setProcessing] = React.useState<boolean>(false)
   const queryClient = useQueryClient()
@@ -68,6 +70,7 @@ export function CreateSubmissionForm(props: Props) {
           <div>
             {hintState.length} / {MAX_SUBMISSION_LENGTH}
           </div>
+          <RerollPromptButton roomId={roomId} rerollUsed={rerollUsed} submissionId={submissionId} />
           <Button type="submit" disabled={processing}>
             {processing ? <Spinner /> : <SendIcon className="size-4" />} Submit Your Hint
           </Button>

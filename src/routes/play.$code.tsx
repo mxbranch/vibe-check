@@ -43,7 +43,7 @@ function RouteComponent() {
   const query = useQuery({
     queryKey: ['play-submission', room.id],
     queryFn: async () => await getValidSubmission({ data: { roomId: room.id } }),
-    refetchInterval: 1000 * 30, // 30 seconds
+    refetchInterval: 1000 * 60, // 60 seconds
     retry: false,
   })
 
@@ -114,10 +114,17 @@ function RouteComponent() {
           roomOwner={submissionData.roomOwner}
         />
         {!submissionData.hint && (
-          <CreateSubmissionForm submissionId={submissionData.id} roomId={room.id} />
+          <CreateSubmissionForm
+            submissionId={submissionData.id}
+            roomId={room.id}
+            rerollUsed={!!submissionData.rerolled}
+          />
         )}
         {submissionData.hint && !submissionData.used && (
-          <div>Thanks for your hint - {submissionData.hint}. Wait to see it played on stream!</div>
+          <div>
+            Thanks for your hint: {submissionData.hint}. You'll get a new prompt once yours has been
+            played on stream!
+          </div>
         )}
       </div>
     </div>

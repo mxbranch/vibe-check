@@ -14,8 +14,8 @@ type Props = Readonly<{
 
 export function SkipSubmissionButton(props: Props) {
   const { roomId, submissionId } = props
-  const queryClient = useQueryClient()
   const [processing, setProcessing] = React.useState<boolean>(false)
+  const queryClient = useQueryClient()
   async function handleClick() {
     setProcessing(true)
     await markSubmissionUsed({ data: { roomId, submissionId, guess: 0.0, result: 'skipped' } })

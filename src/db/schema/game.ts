@@ -25,6 +25,7 @@ export const submission = pgTable('submission', {
   target: numeric({ scale: 2, precision: 3, mode: 'number' }).notNull(),
   hint: text(),
   timestamp: timestamp({ withTimezone: true, mode: 'date' }),
+  rerolled: integer().references(() => prompt.id),
   used: json().$type<{
     timestamp: string
     result: 'played' | 'skipped' | 'banned'

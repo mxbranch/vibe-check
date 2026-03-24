@@ -254,8 +254,71 @@ export const getValidSubmission = createServerFn({ method: 'GET' })
       target: validSubmission.target,
       hint: validSubmission.hint,
       used: validSubmission.used,
+      rerolled: validSubmission.rerolled,
       roomOwner: validSubmission.roomOwner,
     }
+  })
+
+export const rerollPrompt = createServerFn({ method: 'POST' })
+  .inputValidator(
+    v.object({
+      roomId: v.pipe(v.number(), v.integer()),
+      submissionId: v.pipe(v.number(), v.integer()),
+    }),
+  )
+  .handler(async ({ data }) => {
+    // Auth
+    const user = await getMe()
+    if (!user || user.banned) return 'unauthorized'
+
+    const { roomId, submissionId } = data
+
+    // Check there is a valid prompt for the user
+    const currentSubmissionResult = await db
+      .select()
+      .from(submission)
+      .where(
+        and(
+          eq(submission.id, submissionId),
+          eq(submission.owner, user.id),
+          eq(submission.room, roomId),
+          isNull(submission.rerolled),
+        ),
+      )
+    const currentSubmission = currentSubmissionResult[0]
+
+    if (!currentSubmission) {
+      return 'no-valid-prompt'
+    }
+
+    const usedPrompts = await db
+      .select({ prompt: submission.prompt })
+      .from(submission)
+      .where(eq(submission.room, roomId))
+    const usedPromptIds = usedPrompts.map(({ prompt }) => prompt)
+    const prompts = await db
+      .select()
+      .from(prompt)
+      .where(and(isNull(prompt.deactivated), not(inArray(prompt.id, usedPromptIds))))
+    if (prompts.length === 0) {
+      return 'out-of-prompts'
+    }
+    const index = Math.floor(Math.random() * prompts.length)
+    const submissionPrompt = prompts[index]
+    if (!submissionPrompt) {
+      return 'out-of-prompts'
+    }
+
+    const newTarget = Math.random()
+
+    await db
+      .update(submission)
+      .set({
+        rerolled: currentSubmission.prompt,
+        prompt: submissionPrompt.id,
+        target: newTarget,
+      })
+      .where(eq(submission.id, submissionId))
   })
 
 export const postSubmissionSchema = v.object({
