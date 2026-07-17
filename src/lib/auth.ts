@@ -1,13 +1,14 @@
-import { betterAuth } from 'better-auth'
-import { drizzleAdapter } from 'better-auth/adapters/drizzle'
-import { admin } from 'better-auth/plugins'
-import { tanstackStartCookies } from 'better-auth/tanstack-start'
+import { betterAuth } from "better-auth";
+import { drizzleAdapter } from "better-auth/adapters/drizzle";
+import { admin } from "better-auth/plugins";
+import { tanstackStartCookies } from "better-auth/tanstack-start";
 
-import db from '@/db'
+import db from "@/db";
 
 export const auth = betterAuth({
+  appName: "Vibe Check",
   database: drizzleAdapter(db, {
-    provider: 'pg',
+    provider: "pg",
   }),
   emailAndPassword: {
     enabled: false,
@@ -20,6 +21,6 @@ export const auth = betterAuth({
   },
   plugins: [tanstackStartCookies(), admin()],
   onAPIError: {
-    errorURL: '/auth-error',
+    errorURL: "/auth-error",
   },
-})
+});

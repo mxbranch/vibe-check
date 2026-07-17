@@ -521,5 +521,5 @@ export const closeRoom = createServerFn({ method: 'POST' })
           guess: undefined,
         },
       })
-      .where(and(eq(submission.room, data.roomId)))
+      .where(and(eq(submission.room, data.roomId), isNull(submission.used)))
   })
