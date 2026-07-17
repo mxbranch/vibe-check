@@ -33,7 +33,7 @@ export const getMe = createServerFn({
 export const getUser = createServerFn({
   method: 'GET',
 })
-  .inputValidator(v.nullable(v.pipe(v.string(), v.trim())))
+  .validator(v.nullable(v.pipe(v.string(), v.trim())))
   .handler(async ({ data }) => {
     if (!data) return null
     // Auth
@@ -87,7 +87,7 @@ export const deleteMe = createServerFn({
 export const validateRoomCode = createServerFn({
   method: 'GET',
 })
-  .inputValidator(v.pipe(v.string(), v.trim()))
+  .validator(v.pipe(v.string(), v.trim()))
   .handler(async ({ data }) => {
     const roomId = sqids.decode(data)
     const roomCount = await db.$count(room, and(inArray(room.id, roomId), isNull(room.gameEnded)))
@@ -145,7 +145,7 @@ export const createRoom = createServerFn({
 export const getRoom = createServerFn({
   method: 'GET',
 })
-  .inputValidator(v.pipe(v.string(), v.trim()))
+  .validator(v.pipe(v.string(), v.trim()))
   .handler(async ({ data }) => {
     const roomId = sqids.decode(data)
     const roomData = await db
@@ -178,7 +178,7 @@ export const getUserCurrentRoom = createServerFn({
 })
 
 export const getValidSubmission = createServerFn({ method: 'GET' })
-  .inputValidator(
+  .validator(
     v.object({
       roomId: v.pipe(v.number(), v.integer()),
     }),
@@ -260,7 +260,7 @@ export const getValidSubmission = createServerFn({ method: 'GET' })
   })
 
 export const rerollPrompt = createServerFn({ method: 'POST' })
-  .inputValidator(
+  .validator(
     v.object({
       roomId: v.pipe(v.number(), v.integer()),
       submissionId: v.pipe(v.number(), v.integer()),
@@ -328,7 +328,7 @@ export const postSubmissionSchema = v.object({
 export type PostSubmissionSchema = v.InferInput<typeof postSubmissionSchema>
 
 export const postSubmission = createServerFn({ method: 'POST' })
-  .inputValidator(postSubmissionSchema)
+  .validator(postSubmissionSchema)
   .handler(async ({ data }) => {
     // Auth
     const user = await getMe()
@@ -346,7 +346,7 @@ export const postSubmission = createServerFn({ method: 'POST' })
   })
 
 export const getRoomCurrentSubmission = createServerFn({ method: 'GET' })
-  .inputValidator(
+  .validator(
     v.object({
       roomId: v.pipe(v.number(), v.integer()),
     }),
@@ -396,7 +396,7 @@ export const getRoomCurrentSubmission = createServerFn({ method: 'GET' })
   })
 
 export const getRoomNextSubmission = createServerFn({ method: 'GET' })
-  .inputValidator(
+  .validator(
     v.object({
       roomId: v.pipe(v.number(), v.integer()),
     }),
@@ -447,7 +447,7 @@ export const getRoomNextSubmission = createServerFn({ method: 'GET' })
   })
 
 export const markSubmissionUsed = createServerFn({ method: 'POST' })
-  .inputValidator(
+  .validator(
     v.object({
       roomId: v.pipe(v.number(), v.integer()),
       submissionId: v.pipe(v.number(), v.integer()),
@@ -491,7 +491,7 @@ export const markSubmissionUsed = createServerFn({ method: 'POST' })
   })
 
 export const closeRoom = createServerFn({ method: 'POST' })
-  .inputValidator(
+  .validator(
     v.object({
       roomId: v.pipe(v.number(), v.integer()),
     }),

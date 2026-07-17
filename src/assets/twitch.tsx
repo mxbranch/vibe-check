@@ -16,12 +16,15 @@ export function TwitchIcon(props: Props) {
       y="0px"
       viewBox="0 0 2400 2800"
       style={
-        { enableBackground: 'new 0 0 2400 2800', 'xml:space': 'preserve' } as React.CSSProperties
+        {
+          enableBackground: 'new 0 0 2400 2800',
+          'xml:space': 'preserve',
+        } as React.CSSProperties
       }
       className={className}
     >
       <style type="text/css" dangerouslySetInnerHTML={{ __html: '.st0{fill:#FFFFFF;}' }} />
-      <title>Asset 3</title>
+      <title>Twitch</title>
       <g>
         <g id="Layer_1-2">
           <path
