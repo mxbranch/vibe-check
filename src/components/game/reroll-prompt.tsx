@@ -34,8 +34,7 @@ export function RerollPromptButton(props: Props) {
 
   return (
     <Button type="button" onClick={handleClick} disabled={rerollUsed}>
-      {processing ? <Spinner /> : <DicesIcon className="size-4" />}{' '}
-      {rerollUsed ? 'Reroll Used' : 'Reroll Prompt?'}
+      {processing ? <Spinner /> : <DicesIcon className="size-4" />} {rerollUsed ? 'Used' : 'Reroll'}
     </Button>
   )
 }

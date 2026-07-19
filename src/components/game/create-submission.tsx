@@ -1,4 +1,4 @@
-import { useForm, useStore } from '@tanstack/react-form'
+import { useForm, useSelector } from '@tanstack/react-form'
 import { useQueryClient } from '@tanstack/react-query'
 import { SendIcon } from 'lucide-react'
 import React from 'react'
@@ -40,7 +40,7 @@ export function CreateSubmissionForm(props: Props) {
     },
   })
 
-  const hintState = useStore(form.store, (state) => state.values.hint)
+  const hintState = useSelector(form.store, (state) => state.values.hint)
 
   return (
     <>
@@ -72,7 +72,7 @@ export function CreateSubmissionForm(props: Props) {
           </div>
           <RerollPromptButton roomId={roomId} rerollUsed={rerollUsed} submissionId={submissionId} />
           <Button type="submit" disabled={processing}>
-            {processing ? <Spinner /> : <SendIcon className="size-4" />} Submit Your Hint
+            {processing ? <Spinner /> : <SendIcon className="size-4" />} Submit
           </Button>
         </div>
       </form>
