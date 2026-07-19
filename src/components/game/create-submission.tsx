@@ -72,7 +72,7 @@ export function CreateSubmissionForm(props: Props) {
           </div>
           <RerollPromptButton roomId={roomId} rerollUsed={rerollUsed} submissionId={submissionId} />
           <Button type="submit" disabled={processing}>
-            {processing ? <Spinner /> : <SendIcon className="size-4" />} Submit Your Hint
+            {processing ? <Spinner /> : <SendIcon className="size-4" />} Submit
           </Button>
         </div>
       </form>
