@@ -9,12 +9,12 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as AuthErrorRouteImport } from './routes/auth-error'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as PlayCodeRouteImport } from './routes/play.$code'
 import { Route as HostCodeRouteImport } from './routes/host.$code'
 import { Route as HostCodePreviewRouteImport } from './routes/host.$code_.preview'
-import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as IndexRouteImport } from './routes/index'
+import { Route as PlayCodeRouteImport } from './routes/play.$code'
 
 const AuthErrorRoute = AuthErrorRouteImport.update({
   id: '/auth-error',
@@ -82,13 +82,7 @@ export interface FileRouteTypes {
     | '/api/auth/$'
     | '/host/$code/preview'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/auth-error'
-    | '/host/$code'
-    | '/play/$code'
-    | '/api/auth/$'
-    | '/host/$code/preview'
+  to: '/' | '/auth-error' | '/host/$code' | '/play/$code' | '/api/auth/$' | '/host/$code/preview'
   id:
     | '__root__'
     | '/'
@@ -167,8 +161,9 @@ export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
 
-import type { getRouter } from './router.tsx'
 import type { createStart } from '@tanstack/react-start'
+
+import type { getRouter } from './router.tsx'
 declare module '@tanstack/react-start' {
   interface Register {
     ssr: true
