@@ -2,12 +2,7 @@
   "languages": {
     "TypeScript": {
       "prettier": { "allowed": false },
-      "language_servers": [
-        "typescript-ls",
-        "!vtsls",
-        "!typescript-language-server",
-        "...",
-      ],
+      "language_servers": ["vtsls", "!typescript-language-server", "..."],
       "format_on_save": "on",
       "formatter": {
         "language_server": {
@@ -17,12 +12,7 @@
     },
     "TSX": {
       "prettier": { "allowed": false },
-      "language_servers": [
-        "typescript-ls",
-        "!vtsls",
-        "!typescript-language-server",
-        "...",
-      ],
+      "language_servers": ["vtsls", "!typescript-language-server", "..."],
       "format_on_save": "on",
       "formatter": {
         "language_server": {
