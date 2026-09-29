@@ -6,9 +6,10 @@ import * as schema from './schema'
 // You can specify any property from the node-postgres connection options
 const db = drizzle({
   connection: {
-    connectionString: process.env.NETLIFY_DATABASE_URL ?? process.env.DATABASE_URL!,
+    connectionString: process.env.DATABASE_URL!,
   },
   schema,
 })
 
 export default db
+// process.env.NETLIFY_DATABASE_URL ??
