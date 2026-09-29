@@ -19,7 +19,7 @@ export const auth = betterAuth({
       clientSecret: process.env.BETTER_AUTH_TWITCH_SECRET!,
     },
   },
-  plugins: [tanstackStartCookies(), admin()],
+  plugins: [admin(), tanstackStartCookies()],
   onAPIError: {
     errorURL: '/auth-error',
   },

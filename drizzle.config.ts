@@ -2,10 +2,10 @@ import 'dotenv/config'
 import { defineConfig } from 'drizzle-kit'
 
 export default defineConfig({
-  out: './drizzle',
+  out: './netlify/database/migrations/',
   schema: './src/db/schema',
   dialect: 'postgresql',
   dbCredentials: {
-    url: process.env.NETLIFY_DATABASE_URL ?? process.env.DATABASE_URL!,
+    url: process.env.DATABASE_URL!,
   },
 })

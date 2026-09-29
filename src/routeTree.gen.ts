@@ -9,26 +9,21 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthErrorRouteImport } from './routes/auth-error'
 import { Route as HostCodeRouteImport } from './routes/host.$code'
-import { Route as HostCodePreviewRouteImport } from './routes/host.$code_.preview'
-import { Route as IndexRouteImport } from './routes/index'
 import { Route as PlayCodeRouteImport } from './routes/play.$code'
+import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as HostCodePreviewRouteImport } from './routes/host.$code_.preview'
 
-const AuthErrorRoute = AuthErrorRouteImport.update({
-  id: '/auth-error',
-  path: '/auth-error',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PlayCodeRoute = PlayCodeRouteImport.update({
-  id: '/play/$code',
-  path: '/play/$code',
+const AuthErrorRoute = AuthErrorRouteImport.update({
+  id: '/auth-error',
+  path: '/auth-error',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HostCodeRoute = HostCodeRouteImport.update({
@@ -36,14 +31,19 @@ const HostCodeRoute = HostCodeRouteImport.update({
   path: '/host/$code',
   getParentRoute: () => rootRouteImport,
 } as any)
-const HostCodePreviewRoute = HostCodePreviewRouteImport.update({
-  id: '/host/$code_/preview',
-  path: '/host/$code/preview',
+const PlayCodeRoute = PlayCodeRouteImport.update({
+  id: '/play/$code',
+  path: '/play/$code',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HostCodePreviewRoute = HostCodePreviewRouteImport.update({
+  id: '/host/$code_/preview',
+  path: '/host/$code/preview',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -82,7 +82,13 @@ export interface FileRouteTypes {
     | '/api/auth/$'
     | '/host/$code/preview'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth-error' | '/host/$code' | '/play/$code' | '/api/auth/$' | '/host/$code/preview'
+  to:
+    | '/'
+    | '/auth-error'
+    | '/host/$code'
+    | '/play/$code'
+    | '/api/auth/$'
+    | '/host/$code/preview'
   id:
     | '__root__'
     | '/'
@@ -104,13 +110,6 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/auth-error': {
-      id: '/auth-error'
-      path: '/auth-error'
-      fullPath: '/auth-error'
-      preLoaderRoute: typeof AuthErrorRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
@@ -118,11 +117,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/play/$code': {
-      id: '/play/$code'
-      path: '/play/$code'
-      fullPath: '/play/$code'
-      preLoaderRoute: typeof PlayCodeRouteImport
+    '/auth-error': {
+      id: '/auth-error'
+      path: '/auth-error'
+      fullPath: '/auth-error'
+      preLoaderRoute: typeof AuthErrorRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/host/$code': {
@@ -132,11 +131,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HostCodeRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/host/$code_/preview': {
-      id: '/host/$code_/preview'
-      path: '/host/$code/preview'
-      fullPath: '/host/$code/preview'
-      preLoaderRoute: typeof HostCodePreviewRouteImport
+    '/play/$code': {
+      id: '/play/$code'
+      path: '/play/$code'
+      fullPath: '/play/$code'
+      preLoaderRoute: typeof PlayCodeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/auth/$': {
@@ -144,6 +143,13 @@ declare module '@tanstack/react-router' {
       path: '/api/auth/$'
       fullPath: '/api/auth/$'
       preLoaderRoute: typeof ApiAuthSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/host/$code_/preview': {
+      id: '/host/$code_/preview'
+      path: '/host/$code/preview'
+      fullPath: '/host/$code/preview'
+      preLoaderRoute: typeof HostCodePreviewRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -161,9 +167,8 @@ export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
 
-import type { createStart } from '@tanstack/react-start'
-
 import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
 declare module '@tanstack/react-start' {
   interface Register {
     ssr: true
